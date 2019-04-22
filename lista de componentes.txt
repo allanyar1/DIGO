@@ -1,0 +1,105 @@
+BOTONES
+btnVenta // ingresa al modulo de venta
+btnProductos //ingresa al modulo de productos
+btnInventario //ingresa al modulo de Inventario
+btnCorte //ingresa al modulo de inventario
+btnSalir //cierra el programa
+btnGuardarDepartamento
+btnNuevoDeparmatento
+btnEliminarDepartamento
+
+panelProductos //en este esta el modulo de productos
+panelInventarioReg
+panelDepartamentos
+panelCalalogoPro
+pnaelReporteInv
+panelInvBajo
+panelInventario
+lbIdProducto
+lbDescripcion
+lbVentaPor
+lbGanancia
+lbPreVenta
+lbDepartamento
+boxInventario
+boxUnidad
+boxGranel
+boxPaquete
+boxFiltro
+boxDepartamento
+lbExistencia //Es agregar el inventario nuevo
+lbMinimo //Minimo que debe de existir de un producto
+spinnerGanancia
+tablaInvBajo
+tablaDepartamentos
+tablaReporteProductos
+tablaReporteInv
+PanePrincipal
+boxFiltro
+lbCodigoVenta
+txtIdVenta
+btnIdAgregar
+lbCostoFinal
+txtId
+txtDescripcion
+txtPrecioCosto
+txtNuevoDepartamento
+txtPrecioVenta
+txtHay
+txtMinimo
+
+
+
+
+
+
+
+
+
+
+-Sin Departamento-
+Abarrotes
+Carnes drias
+Lacteos
+Cigarros
+Cervezas
+Botanas
+Limpieza
+
+
+
+       try{
+           con2 =DriverManager.getConnection("jdbc:mysql://localhost/Digo","root","password");
+           String sql;
+           if(boxFiltro.getSelectedItem()=="Abarrotes"){
+               sql="SELECT * FROM articulos WHERE departamento='Abarrotes'";
+           }else{
+               sql="SELECT * FROM articulos";
+           }
+            if(boxFiltro.getSelectedItem()=="-Sin Departamento"){
+               sql="SELECT * FROM articulos WHERE departamento=\"-Sin Departamento-\"";
+           }else{
+               sql="SELECT * FROM articulos";
+           }
+             if(boxFiltro.getSelectedItem()=="Carnes frias"){
+               sql="SELECT * FROM articulos WHERE departamento=\"Carnes frias\"";
+           }else{
+               sql="SELECT * FROM articulos";
+           }
+              if(boxFiltro.getSelectedItem()=="Lacteos"){
+               sql="SELECT * FROM articulos WHERE departamento=\"Lacteos\"";
+           }else{
+               sql="SELECT * FROM articulos";
+           }
+               if(boxFiltro.getSelectedItem()=="Cigarros"){
+               sql="SELECT * FROM articulos WHERE departamento=\"Cigarros\"";
+           }else{
+               sql="SELECT * FROM articulos";
+           }
+
+btnGuardarProducto
+btnModProducto
+btnElimProducto
+btnActualizar
+btnVerificarID
+
