@@ -99,6 +99,8 @@ public class VistaDigo extends javax.swing.JFrame implements Runnable{
         paneConfiguracion.remove(panelImpuestos);
         paneConfiguracion.remove(panelAdmiUsuarios);
         paneConfiguracion.remove(panelLogotipo);
+        paneCorte.remove(panelDia);
+        paneCorte.remove(panelCajero);
         btnActualizar.setEnabled(false);
         MostrarTablaProductos();
         MostrarTablaProductos2();
@@ -300,6 +302,9 @@ public class VistaDigo extends javax.swing.JFrame implements Runnable{
         panelCorte = new javax.swing.JPanel();
         btnCorteCajero = new javax.swing.JButton();
         btnCorteDia = new javax.swing.JButton();
+        paneCorte = new javax.swing.JTabbedPane();
+        panelCajero = new javax.swing.JPanel();
+        panelDia = new javax.swing.JPanel();
         jPanel4 = new javax.swing.JPanel();
         lbFecha = new javax.swing.JLabel();
         lbHora = new javax.swing.JLabel();
@@ -1540,9 +1545,45 @@ public class VistaDigo extends javax.swing.JFrame implements Runnable{
 
         btnCorteCajero.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/rojo.png"))); // NOI18N
         btnCorteCajero.setText("Hacer corte de caja de cajero");
+        btnCorteCajero.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCorteCajeroActionPerformed(evt);
+            }
+        });
 
         btnCorteDia.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/azul.png"))); // NOI18N
         btnCorteDia.setText("Hacer corte de caja del dia");
+        btnCorteDia.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCorteDiaActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout panelCajeroLayout = new javax.swing.GroupLayout(panelCajero);
+        panelCajero.setLayout(panelCajeroLayout);
+        panelCajeroLayout.setHorizontalGroup(
+            panelCajeroLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 1317, Short.MAX_VALUE)
+        );
+        panelCajeroLayout.setVerticalGroup(
+            panelCajeroLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 423, Short.MAX_VALUE)
+        );
+
+        paneCorte.addTab("Corte de caja-Turno", panelCajero);
+
+        javax.swing.GroupLayout panelDiaLayout = new javax.swing.GroupLayout(panelDia);
+        panelDia.setLayout(panelDiaLayout);
+        panelDiaLayout.setHorizontalGroup(
+            panelDiaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 1317, Short.MAX_VALUE)
+        );
+        panelDiaLayout.setVerticalGroup(
+            panelDiaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 423, Short.MAX_VALUE)
+        );
+
+        paneCorte.addTab("Corte de caja-Dia", panelDia);
 
         javax.swing.GroupLayout panelCorteLayout = new javax.swing.GroupLayout(panelCorte);
         panelCorte.setLayout(panelCorteLayout);
@@ -1550,19 +1591,25 @@ public class VistaDigo extends javax.swing.JFrame implements Runnable{
             panelCorteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelCorteLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(btnCorteCajero)
-                .addGap(23, 23, 23)
-                .addComponent(btnCorteDia, javax.swing.GroupLayout.PREFERRED_SIZE, 229, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(840, Short.MAX_VALUE))
+                .addGroup(panelCorteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(paneCorte)
+                    .addGroup(panelCorteLayout.createSequentialGroup()
+                        .addComponent(btnCorteCajero)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnCorteDia, javax.swing.GroupLayout.PREFERRED_SIZE, 229, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
         );
         panelCorteLayout.setVerticalGroup(
             panelCorteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelCorteLayout.createSequentialGroup()
-                .addGap(25, 25, 25)
+                .addContainerGap()
                 .addGroup(panelCorteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnCorteCajero, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnCorteDia, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(497, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(paneCorte, javax.swing.GroupLayout.PREFERRED_SIZE, 449, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(61, Short.MAX_VALUE))
         );
 
         panePrincipal.addTab("Corte de caja", panelCorte);
@@ -2594,6 +2641,16 @@ public class VistaDigo extends javax.swing.JFrame implements Runnable{
     private void btnImportarRespaldoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnImportarRespaldoActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_btnImportarRespaldoActionPerformed
+
+    private void btnCorteCajeroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCorteCajeroActionPerformed
+        paneCorte.remove(panelDia);
+        paneCorte.add("Corte de caja-Turno",panelCajero);
+    }//GEN-LAST:event_btnCorteCajeroActionPerformed
+
+    private void btnCorteDiaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCorteDiaActionPerformed
+        paneCorte.remove(panelCajero);
+        paneCorte.add("Corte de caja-Dia",panelDia);
+    }//GEN-LAST:event_btnCorteDiaActionPerformed
    
     public void llenarCombo(){
        //Esta funcion sirve para llenar el componente de departamentos con los registros de la base de datos
@@ -3005,12 +3062,15 @@ public class VistaDigo extends javax.swing.JFrame implements Runnable{
     private javax.swing.JLabel lblCodigoProducto;
     private javax.swing.JLabel lblDes;
     private javax.swing.JTabbedPane paneConfiguracion;
+    private javax.swing.JTabbedPane paneCorte;
     private javax.swing.JTabbedPane panePrincipal;
     private javax.swing.JPanel panelAdmiUsuarios;
+    private javax.swing.JPanel panelCajero;
     private javax.swing.JPanel panelCatalogoPro;
     private javax.swing.JPanel panelConfiguracion;
     private javax.swing.JPanel panelCorte;
     private javax.swing.JPanel panelDepartamentos;
+    private javax.swing.JPanel panelDia;
     private javax.swing.JPanel panelImpuestos;
     private javax.swing.JPanel panelInvBajo;
     private javax.swing.JPanel panelInventario;
