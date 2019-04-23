@@ -296,6 +296,7 @@ public class VistaDigo extends javax.swing.JFrame implements Runnable{
         btnDineroCaja = new javax.swing.JButton();
         btnRespaldoBD = new javax.swing.JButton();
         btnImportarRespaldo = new javax.swing.JButton();
+        panelCorte = new javax.swing.JPanel();
         jPanel4 = new javax.swing.JPanel();
         lbFecha = new javax.swing.JLabel();
         lbHora = new javax.swing.JLabel();
@@ -1534,6 +1535,19 @@ public class VistaDigo extends javax.swing.JFrame implements Runnable{
 
         panePrincipal.addTab("Configuracion", panelConfiguracion);
 
+        javax.swing.GroupLayout panelCorteLayout = new javax.swing.GroupLayout(panelCorte);
+        panelCorte.setLayout(panelCorteLayout);
+        panelCorteLayout.setHorizontalGroup(
+            panelCorteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 1331, Short.MAX_VALUE)
+        );
+        panelCorteLayout.setVerticalGroup(
+            panelCorteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 562, Short.MAX_VALUE)
+        );
+
+        panePrincipal.addTab("Corte de caja", panelCorte);
+
         jPanel4.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
         lbFecha.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
@@ -1663,6 +1677,7 @@ public class VistaDigo extends javax.swing.JFrame implements Runnable{
          panePrincipal.remove(panelVentas);  
          panePrincipal.remove(panelCatalogoPro); 
          panePrincipal.remove(panelConfiguracion);
+         panePrincipal.remove(panelCorte);
          panePrincipal.add("Modulo de Inventario",panelInventario);
          panePrincipal.add("Productos Bajo en Inventario",panelInvBajo);
          panePrincipal.add("Movimientos de Inventario",panelMov);
@@ -1670,7 +1685,15 @@ public class VistaDigo extends javax.swing.JFrame implements Runnable{
     }//GEN-LAST:event_btnInventarioActionPerformed
 
     private void btnCorteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCorteActionPerformed
-       
+        panePrincipal.remove(panelVentas);  
+         panePrincipal.remove(panelInvBajo);
+         panePrincipal.remove(panelInventario);
+         panePrincipal.remove(panelMov);
+         panePrincipal.remove(panelConfiguracion);
+         panePrincipal.remove(panelProductos);
+         panePrincipal.remove(panelDepartamentos);
+         panePrincipal.remove(panelCatalogoPro);
+         panePrincipal.add("Corte de caja",panelCorte);
     }//GEN-LAST:event_btnCorteActionPerformed
 
     private void btnProductosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnProductosActionPerformed
@@ -1680,8 +1703,9 @@ public class VistaDigo extends javax.swing.JFrame implements Runnable{
          panePrincipal.remove(panelMov);
          panePrincipal.remove(panelConfiguracion);
          panePrincipal.add("Modulo de productos",panelProductos);
-         panePrincipal.add("Departamentos",panelDepartamentos);
-         panePrincipal.add("Catalogo de Productos",panelCatalogoPro);
+         panePrincipal.add("Departamentos"panelDepartamentos);
+         panePrincipal.add("Catalogo de productos",panelCatalogoPro);
+         panePrincipal.remove(panelCorte);
         
          
     }//GEN-LAST:event_btnProductosActionPerformed
@@ -2963,6 +2987,7 @@ public class VistaDigo extends javax.swing.JFrame implements Runnable{
     private javax.swing.JPanel panelAdmiUsuarios;
     private javax.swing.JPanel panelCatalogoPro;
     private javax.swing.JPanel panelConfiguracion;
+    private javax.swing.JPanel panelCorte;
     private javax.swing.JPanel panelDepartamentos;
     private javax.swing.JPanel panelImpuestos;
     private javax.swing.JPanel panelInvBajo;
