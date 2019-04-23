@@ -94,6 +94,7 @@ public class VistaDigo extends javax.swing.JFrame implements Runnable{
         panePrincipal.remove(panelCatalogoPro);
         panePrincipal.remove(panelInventario);
         panePrincipal.remove(panelMov);
+        panePrincipal.remove(panelCorte);
         panePrincipal.remove(panelConfiguracion);
         paneConfiguracion.remove(panelImpuestos);
         paneConfiguracion.remove(panelAdmiUsuarios);
@@ -297,6 +298,8 @@ public class VistaDigo extends javax.swing.JFrame implements Runnable{
         btnRespaldoBD = new javax.swing.JButton();
         btnImportarRespaldo = new javax.swing.JButton();
         panelCorte = new javax.swing.JPanel();
+        btnCorteCajero = new javax.swing.JButton();
+        btnCorteDia = new javax.swing.JButton();
         jPanel4 = new javax.swing.JPanel();
         lbFecha = new javax.swing.JLabel();
         lbHora = new javax.swing.JLabel();
@@ -1535,15 +1538,31 @@ public class VistaDigo extends javax.swing.JFrame implements Runnable{
 
         panePrincipal.addTab("Configuracion", panelConfiguracion);
 
+        btnCorteCajero.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/rojo.png"))); // NOI18N
+        btnCorteCajero.setText("Hacer corte de caja de cajero");
+
+        btnCorteDia.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/azul.png"))); // NOI18N
+        btnCorteDia.setText("Hacer corte de caja del dia");
+
         javax.swing.GroupLayout panelCorteLayout = new javax.swing.GroupLayout(panelCorte);
         panelCorte.setLayout(panelCorteLayout);
         panelCorteLayout.setHorizontalGroup(
             panelCorteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1331, Short.MAX_VALUE)
+            .addGroup(panelCorteLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(btnCorteCajero)
+                .addGap(23, 23, 23)
+                .addComponent(btnCorteDia, javax.swing.GroupLayout.PREFERRED_SIZE, 229, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(840, Short.MAX_VALUE))
         );
         panelCorteLayout.setVerticalGroup(
             panelCorteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 562, Short.MAX_VALUE)
+            .addGroup(panelCorteLayout.createSequentialGroup()
+                .addGap(25, 25, 25)
+                .addGroup(panelCorteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnCorteCajero, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnCorteDia, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(497, Short.MAX_VALUE))
         );
 
         panePrincipal.addTab("Corte de caja", panelCorte);
@@ -1703,7 +1722,7 @@ public class VistaDigo extends javax.swing.JFrame implements Runnable{
          panePrincipal.remove(panelMov);
          panePrincipal.remove(panelConfiguracion);
          panePrincipal.add("Modulo de productos",panelProductos);
-         panePrincipal.add("Departamentos"panelDepartamentos);
+         panePrincipal.add("Departamentos",panelDepartamentos);
          panePrincipal.add("Catalogo de productos",panelCatalogoPro);
          panePrincipal.remove(panelCorte);
         
@@ -2381,6 +2400,7 @@ public class VistaDigo extends javax.swing.JFrame implements Runnable{
          panePrincipal.remove(panelInventario);
          panePrincipal.remove(panelMov);
          panePrincipal.remove(panelInvBajo);  
+         panePrincipal.remove(panelCorte);
          panePrincipal.add("Configuracion",panelConfiguracion);
          
     }//GEN-LAST:event_btnConfiguracionActionPerformed
@@ -2903,6 +2923,8 @@ public class VistaDigo extends javax.swing.JFrame implements Runnable{
     private javax.swing.JButton btnConfiUsuarios;
     private javax.swing.JButton btnConfiguracion;
     private javax.swing.JButton btnCorte;
+    private javax.swing.JButton btnCorteCajero;
+    private javax.swing.JButton btnCorteDia;
     private javax.swing.JButton btnCrearUsuario;
     private javax.swing.JButton btnDineroCaja;
     private javax.swing.JButton btnElimProducto;
