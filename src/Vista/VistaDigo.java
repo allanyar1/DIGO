@@ -48,6 +48,7 @@ public class VistaDigo extends javax.swing.JFrame implements Runnable{
     Controlador.Controlador_Movimientos ConMov= new Controlador.Controlador_Movimientos();
     Controlador.Controlador_Login ConLog= new Controlador.Controlador_Login();
     Controlador.Controlador_Logotipo ConLogo= new Controlador.Controlador_Logotipo();
+    Controlador.Controlador_Corte ConCor= new Controlador.Controlador_Corte();
     FileInputStream fis;
     int longitudBytes;
     String hora,minutos,segundos;
@@ -66,6 +67,7 @@ public class VistaDigo extends javax.swing.JFrame implements Runnable{
     double dolar;
     String cajaString;
     double caja;
+    float corte=0;
     public VistaDigo() throws SQLException{
         initComponents();
        
@@ -109,6 +111,8 @@ public class VistaDigo extends javax.swing.JFrame implements Runnable{
         MostrarTablaMovimientos();
         MostrarTablaDepartamentos();
         MostrarTablaUsuarios();
+        MostrarSalida();
+        MostrarEntrada();
         llenarCombo();
         //Permisos();
         lbVerificacion.setVisible(false);
@@ -298,13 +302,17 @@ public class VistaDigo extends javax.swing.JFrame implements Runnable{
         btnImpuestos = new javax.swing.JButton();
         btnDineroCaja = new javax.swing.JButton();
         btnRespaldoBD = new javax.swing.JButton();
-        btnImportarRespaldo = new javax.swing.JButton();
         panelCorte = new javax.swing.JPanel();
         btnCorteCajero = new javax.swing.JButton();
         btnCorteDia = new javax.swing.JButton();
         paneCorte = new javax.swing.JTabbedPane();
-        panelCajero = new javax.swing.JPanel();
         panelDia = new javax.swing.JPanel();
+        panelCajero = new javax.swing.JPanel();
+        jScrollPane9 = new javax.swing.JScrollPane();
+        tablaSalidas = new javax.swing.JTable();
+        jScrollPane10 = new javax.swing.JScrollPane();
+        tablaEntradas = new javax.swing.JTable();
+        jPanel5 = new javax.swing.JPanel();
         jPanel4 = new javax.swing.JPanel();
         lbFecha = new javax.swing.JLabel();
         lbHora = new javax.swing.JLabel();
@@ -709,8 +717,8 @@ public class VistaDigo extends javax.swing.JFrame implements Runnable{
                         .addComponent(txtIdInventarioB, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnBuscaId))
-                    .addComponent(btnRegInventario, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnRegInventario))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 309, Short.MAX_VALUE)
                 .addComponent(jScrollPane7, javax.swing.GroupLayout.PREFERRED_SIZE, 648, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
@@ -738,7 +746,7 @@ public class VistaDigo extends javax.swing.JFrame implements Runnable{
                     .addComponent(btnRegInventario, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnRegistrarInv)
                     .addComponent(btnEliminarInv, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(0, 136, Short.MAX_VALUE))
+                .addGap(0, 97, Short.MAX_VALUE))
         );
 
         panePrincipal.addTab("Módulo  de Compras", panelInventario);
@@ -1492,13 +1500,6 @@ public class VistaDigo extends javax.swing.JFrame implements Runnable{
             }
         });
 
-        btnImportarRespaldo.setToolTipText("Respaldo de Base de Datos");
-        btnImportarRespaldo.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnImportarRespaldoActionPerformed(evt);
-            }
-        });
-
         javax.swing.GroupLayout panelConfiguracionLayout = new javax.swing.GroupLayout(panelConfiguracion);
         panelConfiguracion.setLayout(panelConfiguracionLayout);
         panelConfiguracionLayout.setHorizontalGroup(
@@ -1518,8 +1519,6 @@ public class VistaDigo extends javax.swing.JFrame implements Runnable{
                         .addGap(18, 18, 18)
                         .addComponent(btnDineroCaja, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(btnImportarRespaldo, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
                         .addComponent(btnRespaldoBD, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
@@ -1534,8 +1533,7 @@ public class VistaDigo extends javax.swing.JFrame implements Runnable{
                     .addComponent(btnLogotipo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btnImpuestos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btnDineroCaja, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnRespaldoBD, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnImportarRespaldo, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(btnRespaldoBD, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(paneConfiguracion)
                 .addContainerGap())
@@ -1559,31 +1557,85 @@ public class VistaDigo extends javax.swing.JFrame implements Runnable{
             }
         });
 
-        javax.swing.GroupLayout panelCajeroLayout = new javax.swing.GroupLayout(panelCajero);
-        panelCajero.setLayout(panelCajeroLayout);
-        panelCajeroLayout.setHorizontalGroup(
-            panelCajeroLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1317, Short.MAX_VALUE)
-        );
-        panelCajeroLayout.setVerticalGroup(
-            panelCajeroLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 423, Short.MAX_VALUE)
-        );
-
-        paneCorte.addTab("Corte de caja-Turno", panelCajero);
-
         javax.swing.GroupLayout panelDiaLayout = new javax.swing.GroupLayout(panelDia);
         panelDia.setLayout(panelDiaLayout);
         panelDiaLayout.setHorizontalGroup(
             panelDiaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1317, Short.MAX_VALUE)
+            .addGap(0, 0, Short.MAX_VALUE)
         );
         panelDiaLayout.setVerticalGroup(
             panelDiaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 423, Short.MAX_VALUE)
+            .addGap(0, 0, Short.MAX_VALUE)
         );
 
         paneCorte.addTab("Corte de caja-Dia", panelDia);
+
+        tablaSalidas.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane9.setViewportView(tablaSalidas);
+
+        tablaEntradas.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane10.setViewportView(tablaEntradas);
+
+        jPanel5.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+
+        javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
+        jPanel5.setLayout(jPanel5Layout);
+        jPanel5Layout.setHorizontalGroup(
+            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 517, Short.MAX_VALUE)
+        );
+        jPanel5Layout.setVerticalGroup(
+            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+
+        javax.swing.GroupLayout panelCajeroLayout = new javax.swing.GroupLayout(panelCajero);
+        panelCajero.setLayout(panelCajeroLayout);
+        panelCajeroLayout.setHorizontalGroup(
+            panelCajeroLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelCajeroLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(panelCajeroLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jScrollPane9, javax.swing.GroupLayout.DEFAULT_SIZE, 253, Short.MAX_VALUE)
+                    .addComponent(jScrollPane10, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(521, Short.MAX_VALUE))
+        );
+        panelCajeroLayout.setVerticalGroup(
+            panelCajeroLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelCajeroLayout.createSequentialGroup()
+                .addGap(41, 41, 41)
+                .addGroup(panelCajeroLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(panelCajeroLayout.createSequentialGroup()
+                        .addComponent(jScrollPane9, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 37, Short.MAX_VALUE)
+                        .addComponent(jScrollPane10, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(25, 25, 25))
+        );
+
+        paneCorte.addTab("Corte de caja-Turno", panelCajero);
 
         javax.swing.GroupLayout panelCorteLayout = new javax.swing.GroupLayout(panelCorte);
         panelCorte.setLayout(panelCorteLayout);
@@ -2018,12 +2070,15 @@ public class VistaDigo extends javax.swing.JFrame implements Runnable{
         DateFormat f = new SimpleDateFormat("yyyy/MM/dd");       
         fecha=f.format(date);
         hora=h.format(date);
+        float corte=Float.parseFloat(txtPrecioVentaInv.getText())*Float.parseFloat(txtNuevaCantidad.getText());
+        String usuario=lbUsuario.getText();
         if("".equals(lblCodigoProducto.getText())){
         JOptionPane.showMessageDialog(null,"No ingresaste un Id o seleccionaste un inventario");
         }else{
             try {
                 //regMovimientoEntrada();
                 ConMov.registrarMovimientos(fecha,hora,descripcion,habia,tipo,cantidad,existencia);
+                ConCor.regCorte(usuario,fecha,hora,tipo,corte);
                 //Este metodo sirve para hacer la modificacion de las compras
                 regInvTabla();
                 MostrarTablaMovimientos();
@@ -2199,6 +2254,7 @@ public class VistaDigo extends javax.swing.JFrame implements Runnable{
 
     private void btnCobrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCobrarActionPerformed
        //Esta evento sirve para realizar el cobro de un producto
+        String usuario=lbUsuario.getText();
         String descripcion="";
         int habia=0;
         String tipo="Salida", respuesta;
@@ -2240,8 +2296,9 @@ public class VistaDigo extends javax.swing.JFrame implements Runnable{
                             habia=Integer.parseInt(tablaVentas.getValueAt(cont, 4)+"");
                             cantidad=Integer.parseInt(tablaVentas.getValueAt(cont, 2)+"");
                             existencia=habia-cantidad;
-
+                            corte=Float.parseFloat(lbCobroFinal.getText());
                             ConMov.registrarMovimientos(fecha2,hora,descripcion,habia,tipo,cantidad,existencia);
+                           // ConCor.regCorte(usuario,fecha2,hora,tipo,corte);
                         }
                         else
                             break;
@@ -2278,6 +2335,7 @@ public class VistaDigo extends javax.swing.JFrame implements Runnable{
                         "Codigo de producto", "Descripcion", "Cantidad", "Precio de Venta", "Existencia"
                     }));
                     ii=0;
+                    ConCor.regCorte(usuario,fecha2,hora,tipo,corte);
                     lbCobroFinal.setText("0.00");
                 }
             } catch (SQLException ex) {
@@ -2638,10 +2696,6 @@ public class VistaDigo extends javax.swing.JFrame implements Runnable{
         System.out.println(caja);
     }//GEN-LAST:event_btnDineroCajaActionPerformed
 
-    private void btnImportarRespaldoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnImportarRespaldoActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnImportarRespaldoActionPerformed
-
     private void btnCorteCajeroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCorteCajeroActionPerformed
         paneCorte.remove(panelDia);
         paneCorte.add("Corte de caja-Turno",panelCajero);
@@ -2695,6 +2749,14 @@ public class VistaDigo extends javax.swing.JFrame implements Runnable{
     public void MostrarTablaMovimientos() throws SQLException{
         //Esta funcion sirve para traer los datos de la base de datos a la tabla
         tablaMovientos.setModel(ConPri.MostrarTablaMov());
+    }
+    public void MostrarSalida() throws SQLException{
+        //Esta funcion sirve para traer los datos de la base de datos a la tabla
+        tablaSalidas.setModel(ConPri.MostrarSalida());
+    }
+    public void MostrarEntrada() throws SQLException{
+        //Esta funcion sirve para traer los datos de la base de datos a la tabla
+        tablaEntradas.setModel(ConPri.MostrarEntrada());
     }
     public void MostrarTablaUsuarios() throws SQLException{
         //Esta funcion sirve para traer los datos de la base de datos a la tabla
@@ -2993,7 +3055,6 @@ public class VistaDigo extends javax.swing.JFrame implements Runnable{
     private javax.swing.JButton btnGuardarProducto;
     private javax.swing.JButton btnGuardarUsuario;
     private javax.swing.JButton btnIdAgregar;
-    private javax.swing.JButton btnImportarRespaldo;
     private javax.swing.JButton btnImpuestos;
     private javax.swing.JButton btnInventario;
     private javax.swing.JButton btnLimpiarImagen;
@@ -3021,7 +3082,9 @@ public class VistaDigo extends javax.swing.JFrame implements Runnable{
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
+    private javax.swing.JPanel jPanel5;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane10;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
@@ -3029,6 +3092,7 @@ public class VistaDigo extends javax.swing.JFrame implements Runnable{
     private javax.swing.JScrollPane jScrollPane6;
     private javax.swing.JScrollPane jScrollPane7;
     private javax.swing.JScrollPane jScrollPane8;
+    private javax.swing.JScrollPane jScrollPane9;
     private javax.swing.JLabel lbAgregarCantidad;
     private javax.swing.JLabel lbBusquedaFiltrada;
     private javax.swing.JLabel lbCobroFinal;
@@ -3084,11 +3148,13 @@ public class VistaDigo extends javax.swing.JFrame implements Runnable{
     private javax.swing.JRadioButton radioUnidad;
     private javax.swing.JSpinner spinnerGanancia;
     private javax.swing.JTable tablaDepartamentos;
+    private javax.swing.JTable tablaEntradas;
     private javax.swing.JTable tablaInvBajo;
     private javax.swing.JTable tablaMovientos;
     private javax.swing.JTable tablaProductos;
     private javax.swing.JTable tablaReporteInv;
     private javax.swing.JTable tablaReporteProductos;
+    private javax.swing.JTable tablaSalidas;
     private javax.swing.JTable tablaUsuarios;
     private javax.swing.JTable tablaVentas;
     private javax.swing.JTextField txtBuscarArt;
