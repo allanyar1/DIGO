@@ -149,6 +149,36 @@ public class Controlador_Principal {
         rs = pst.executeQuery();
         return DbUtils.resultSetToTableModel(rs);
     }
+    public TableModel MostrarSalida() throws SQLException {
+        /**
+         * *
+         *
+         * Esta función se utiliza para establecer una conexión entre la base de
+         * datos y la tabla de movimientos de entrada y salida
+         *
+         */
+        PreparedStatement pst;
+        ResultSet rs;
+        String sql = "SELECT Usuario,Fecha,Hora,Total FROM `corte_turno` WHERE Tipo='Salida'";
+        pst = Coneccion().prepareStatement(sql);
+        rs = pst.executeQuery();
+        return DbUtils.resultSetToTableModel(rs);
+    }
+    public TableModel MostrarEntrada() throws SQLException {
+        /**
+         * *
+         *
+         * Esta función se utiliza para establecer una conexión entre la base de
+         * datos y la tabla de movimientos de entrada y salida
+         *
+         */
+        PreparedStatement pst;
+        ResultSet rs;
+        String sql = "SELECT Usuario,Fecha,Hora,Total FROM `corte_turno` WHERE Tipo='Entrada'";
+        pst = Coneccion().prepareStatement(sql);
+        rs = pst.executeQuery();
+        return DbUtils.resultSetToTableModel(rs);
+    }
 
     public Vector<String> MostrarTablaVentas(int Id) throws SQLException {
         /**
