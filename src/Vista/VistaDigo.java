@@ -2808,7 +2808,7 @@ public class VistaDigo extends javax.swing.JFrame implements Runnable{
         } catch (SQLException ex) {
             Logger.getLogger(VistaDigo.class.getName()).log(Level.SEVERE, null, ex);
         }
-        ImageIcon icono=new ImageIcon(img);
+ImageIcon icono=new ImageIcon(img);
         lbFoto.setIcon(icono);
     }
     public static void main(String args[]) {
