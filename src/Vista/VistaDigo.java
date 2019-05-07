@@ -1645,8 +1645,8 @@ public class VistaDigo extends javax.swing.JFrame implements Runnable{
         panelCajeroLayout.setVerticalGroup(
             panelCajeroLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelCajeroLayout.createSequentialGroup()
-                .addGap(41, 41, 41)
-                .addGroup(panelCajeroLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addContainerGap()
+                .addGroup(panelCajeroLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(panelCajeroLayout.createSequentialGroup()
                         .addComponent(jScrollPane9, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -1654,14 +1654,13 @@ public class VistaDigo extends javax.swing.JFrame implements Runnable{
                         .addGroup(panelCajeroLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel2)
                             .addComponent(lbSalidas))
-                        .addGap(23, 23, 23)
+                        .addGap(18, 18, 18)
                         .addComponent(jScrollPane10, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(panelCajeroLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel3)
-                            .addComponent(lbEntradas))
-                        .addGap(0, 1, Short.MAX_VALUE)))
-                .addGap(25, 25, 25))
+                        .addGroup(panelCajeroLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(lbEntradas)
+                            .addComponent(jLabel3))))
+                .addContainerGap(66, Short.MAX_VALUE))
         );
 
         paneCorte.addTab("Corte de caja-Turno", panelCajero);
