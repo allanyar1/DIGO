@@ -313,6 +313,10 @@ public class VistaDigo extends javax.swing.JFrame implements Runnable{
         jScrollPane10 = new javax.swing.JScrollPane();
         tablaEntradas = new javax.swing.JTable();
         jPanel5 = new javax.swing.JPanel();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        lbSalidas = new javax.swing.JLabel();
+        lbEntradas = new javax.swing.JLabel();
         jPanel4 = new javax.swing.JPanel();
         lbFecha = new javax.swing.JLabel();
         lbHora = new javax.swing.JLabel();
@@ -1609,6 +1613,14 @@ public class VistaDigo extends javax.swing.JFrame implements Runnable{
             .addGap(0, 0, Short.MAX_VALUE)
         );
 
+        jLabel2.setText("Salidas:");
+
+        jLabel3.setText("Entradas");
+
+        lbSalidas.setText("$0.00");
+
+        lbEntradas.setText("$0.00");
+
         javax.swing.GroupLayout panelCajeroLayout = new javax.swing.GroupLayout(panelCajero);
         panelCajero.setLayout(panelCajeroLayout);
         panelCajeroLayout.setHorizontalGroup(
@@ -1616,8 +1628,16 @@ public class VistaDigo extends javax.swing.JFrame implements Runnable{
             .addGroup(panelCajeroLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(panelCajeroLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(panelCajeroLayout.createSequentialGroup()
+                        .addComponent(jLabel2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(lbSalidas, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jScrollPane9, javax.swing.GroupLayout.DEFAULT_SIZE, 253, Short.MAX_VALUE)
-                    .addComponent(jScrollPane10, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                    .addComponent(jScrollPane10, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                    .addGroup(panelCajeroLayout.createSequentialGroup()
+                        .addComponent(jLabel3)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(lbEntradas, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(18, 18, 18)
                 .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(521, Short.MAX_VALUE))
@@ -1630,8 +1650,17 @@ public class VistaDigo extends javax.swing.JFrame implements Runnable{
                     .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(panelCajeroLayout.createSequentialGroup()
                         .addComponent(jScrollPane9, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 37, Short.MAX_VALUE)
-                        .addComponent(jScrollPane10, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(panelCajeroLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel2)
+                            .addComponent(lbSalidas))
+                        .addGap(23, 23, 23)
+                        .addComponent(jScrollPane10, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(panelCajeroLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel3)
+                            .addComponent(lbEntradas))
+                        .addGap(0, 1, Short.MAX_VALUE)))
                 .addGap(25, 25, 25))
         );
 
@@ -1660,8 +1689,8 @@ public class VistaDigo extends javax.swing.JFrame implements Runnable{
                     .addComponent(btnCorteCajero, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnCorteDia, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(paneCorte, javax.swing.GroupLayout.PREFERRED_SIZE, 449, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(61, Short.MAX_VALUE))
+                .addComponent(paneCorte, javax.swing.GroupLayout.PREFERRED_SIZE, 480, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(30, Short.MAX_VALUE))
         );
 
         panePrincipal.addTab("Corte de caja", panelCorte);
@@ -3074,6 +3103,8 @@ public class VistaDigo extends javax.swing.JFrame implements Runnable{
     private javax.swing.ButtonGroup grupo;
     private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
@@ -3102,6 +3133,7 @@ public class VistaDigo extends javax.swing.JFrame implements Runnable{
     private javax.swing.JLabel lbDepartamentoNuevo;
     private javax.swing.JLabel lbDescripcion;
     private javax.swing.JLabel lbDescripcionInv;
+    private javax.swing.JLabel lbEntradas;
     private javax.swing.JLabel lbExistencia;
     private javax.swing.JLabel lbExistenciaActualInv;
     private javax.swing.JLabel lbFecha;
@@ -3118,6 +3150,7 @@ public class VistaDigo extends javax.swing.JFrame implements Runnable{
     private javax.swing.JLabel lbPrecioCostoA;
     private javax.swing.JLabel lbPrecioCostoB;
     private javax.swing.JLabel lbPrecioVentaB;
+    private javax.swing.JLabel lbSalidas;
     private javax.swing.JLabel lbSignoPesos;
     private javax.swing.JLabel lbUsuario;
     private javax.swing.JLabel lbUsuarioNuevo;
