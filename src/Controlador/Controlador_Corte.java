@@ -43,6 +43,44 @@ public class Controlador_Corte {
             System.out.println(ex);
         }
     }
+    public void corte_borrar(){
+        PreparedStatement pst;
+
+        try {
+            String sql = "TRUNCATE TABLE corte_turno";
+            pst = Coneccion().prepareStatement(sql);
+            pst.executeUpdate();
+           
+        } catch (SQLException ex) {
+            System.out.println(ex);
+        }
+        
+    }
+    public void corte_temporal(float monto,float entrada,float salida, float total){
+        /**
+         * *
+         *
+         * Esta función se utiliza para registrar el movimiento y tener control
+         * de entradas y salidas
+         *
+         */
+        PreparedStatement pst;
+
+        try {
+            String sql = "INSERT INTO `corte_temporal`(`Monto_Caja`, `Entradas`, `Salidas`, `Total`) VALUES (?,?,?,?)";
+            pst = Coneccion().prepareStatement(sql);
+          
+            pst.setFloat(1, monto);
+            pst.setFloat(2,entrada );
+            pst.setFloat(3,salida );
+            pst.setFloat(4,total );
+            pst.executeUpdate();
+          
+        } catch (SQLException ex) {
+            System.out.println(ex);
+        }
+    }
+    
         
     }
 
