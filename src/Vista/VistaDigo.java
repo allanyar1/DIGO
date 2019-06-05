@@ -1,5 +1,4 @@
 package Vista;
-
 import com.mysql.jdbc.exceptions.MySQLIntegrityConstraintViolationException;
 import java.awt.HeadlessException;
 import java.awt.Image;
@@ -15,6 +14,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import static java.lang.System.exit;
+import java.math.RoundingMode;
 import java.sql.Blob;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -22,6 +22,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.DateFormat;
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -63,7 +64,9 @@ public class VistaDigo extends javax.swing.JFrame implements Runnable{
     PreparedStatement pst2=null;
     ResultSet rs2=null;
     int ii=0;
-    float Total;
+    Boolean ban=false;
+    Double Total;
+    Double TotalCobro;
     String dolarString;
     double dolar;
     String cajaString;
@@ -250,6 +253,7 @@ public class VistaDigo extends javax.swing.JFrame implements Runnable{
         btnEliminarVenta = new javax.swing.JButton();
         btnMas = new javax.swing.JButton();
         btnMenos = new javax.swing.JButton();
+        Cb_dolar = new javax.swing.JCheckBox();
         panelConfiguracion = new javax.swing.JPanel();
         paneConfiguracion = new javax.swing.JTabbedPane();
         panelAdmiUsuarios = new javax.swing.JPanel();
@@ -950,6 +954,23 @@ public class VistaDigo extends javax.swing.JFrame implements Runnable{
             }
         });
 
+        Cb_dolar.setText("Dolares");
+        Cb_dolar.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                Cb_dolarItemStateChanged(evt);
+            }
+        });
+        Cb_dolar.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                Cb_dolarFocusLost(evt);
+            }
+        });
+        Cb_dolar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                Cb_dolarActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout panelVentasLayout = new javax.swing.GroupLayout(panelVentas);
         panelVentas.setLayout(panelVentasLayout);
         panelVentasLayout.setHorizontalGroup(
@@ -957,33 +978,35 @@ public class VistaDigo extends javax.swing.JFrame implements Runnable{
             .addGroup(panelVentasLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(panelVentasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelVentasLayout.createSequentialGroup()
-                        .addGroup(panelVentasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 1268, Short.MAX_VALUE)
-                            .addGroup(panelVentasLayout.createSequentialGroup()
-                                .addComponent(lbCodigoVenta)
-                                .addGap(18, 18, 18)
-                                .addComponent(txtIdVenta)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(btnIdAgregar, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(57, 57, 57))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelVentasLayout.createSequentialGroup()
+                    .addGroup(panelVentasLayout.createSequentialGroup()
                         .addGroup(panelVentasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(panelVentasLayout.createSequentialGroup()
                                 .addComponent(btnEliminarVenta, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelVentasLayout.createSequentialGroup()
-                                .addGap(0, 0, Short.MAX_VALUE)
+                                .addGap(0, 537, Short.MAX_VALUE)
                                 .addComponent(btnMenos)
                                 .addGap(18, 18, 18)
                                 .addComponent(btnMas)
                                 .addGap(285, 285, 285)))
-                        .addComponent(btnCobrar, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(43, 43, 43)
-                        .addComponent(lbSignoPesos)
+                        .addGroup(panelVentasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(panelVentasLayout.createSequentialGroup()
+                                .addComponent(Cb_dolar)
+                                .addGap(150, 150, 150))
+                            .addGroup(panelVentasLayout.createSequentialGroup()
+                                .addComponent(btnCobrar, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(43, 43, 43)
+                                .addComponent(lbSignoPesos)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 47, Short.MAX_VALUE)
+                                .addComponent(lbCobroFinal))))
+                    .addComponent(jScrollPane4, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 1268, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelVentasLayout.createSequentialGroup()
+                        .addComponent(lbCodigoVenta)
                         .addGap(18, 18, 18)
-                        .addComponent(lbCobroFinal)
-                        .addGap(86, 86, 86))))
+                        .addComponent(txtIdVenta)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnIdAgregar, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(57, 57, 57))
         );
         panelVentasLayout.setVerticalGroup(
             panelVentasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -997,7 +1020,9 @@ public class VistaDigo extends javax.swing.JFrame implements Runnable{
                 .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 297, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGroup(panelVentasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(panelVentasLayout.createSequentialGroup()
-                        .addGap(66, 66, 66)
+                        .addGap(36, 36, 36)
+                        .addComponent(Cb_dolar)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(panelVentasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(btnCobrar, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(lbCobroFinal)
@@ -2621,6 +2646,7 @@ public class VistaDigo extends javax.swing.JFrame implements Runnable{
         DateFormat f = new SimpleDateFormat("yyyy/MM/dd");       
         fecha2=f.format(date);
         hora=h.format(date);
+        Float tot;
         respuesta=JOptionPane.showInputDialog(null, "Por favor, pague: "+lbCobroFinal.getText()+" pesos", "Cobro", JOptionPane.INFORMATION_MESSAGE);
         if(respuesta!=null)
         {
@@ -2630,12 +2656,17 @@ public class VistaDigo extends javax.swing.JFrame implements Runnable{
                     btnCobrarActionPerformed(null);
                 else
                 {
-                    Float cambio = pago-Float.parseFloat(lbCobroFinal.getText());
+                    Double cambio = pago-Double.parseDouble(lbCobroFinal.getText());
+                    if(Cb_dolar.isSelected())
+                        cambio=cambio*dolar;
                     JOptionPane.showMessageDialog(null, "Su cambio es de: $"+cambio+"0 pesos", "Cobro", JOptionPane.INFORMATION_MESSAGE);
 
                     int Id=ConVen.CalcularId();
                     java.util.Calendar fecha = new java.util.GregorianCalendar();
-                    JOptionPane.showMessageDialog(null, ConVen.Ventas(Id+1, Float.parseFloat(lbCobroFinal.getText()), fecha, lbUsuario.getText()));
+                    tot=Float.parseFloat(lbCobroFinal.getText());
+                    if(Cb_dolar.isSelected())
+                        tot=tot*Float.parseFloat(dolar+"");
+                    JOptionPane.showMessageDialog(null, ConVen.Ventas(Id+1, tot, fecha, lbUsuario.getText()));
 
                     for (int cont = 0; cont < tablaVentas.getRowCount(); cont++) 
                     {
@@ -2692,6 +2723,8 @@ public class VistaDigo extends javax.swing.JFrame implements Runnable{
                     }));
                     ii=0;
                     ConCor.regCorte(usuario,fecha2,hora,tipo,corte);
+                    Cb_dolar.setSelected(false);
+                    ban=false;
                     lbCobroFinal.setText("0.00");
                 }
             } catch (SQLException ex) {
@@ -3117,6 +3150,31 @@ public class VistaDigo extends javax.swing.JFrame implements Runnable{
     private void btnReporteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReporteActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_btnReporteActionPerformed
+
+    private void Cb_dolarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Cb_dolarActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_Cb_dolarActionPerformed
+
+    private void Cb_dolarFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_Cb_dolarFocusLost
+        // TODO add your handling code here:
+    }//GEN-LAST:event_Cb_dolarFocusLost
+
+    private void Cb_dolarItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_Cb_dolarItemStateChanged
+        // TODO add your handling code here:
+        DecimalFormat df = new DecimalFormat("0.00");
+        df.setRoundingMode(RoundingMode.UP);
+        if(!ban){
+            TotalCobro=Double.parseDouble(lbCobroFinal.getText());
+            ban=true;
+        }
+        if(Cb_dolar.isSelected()){
+            Double TotalDolar = TotalCobro/dolar;
+            lbCobroFinal.setText(df.format(TotalDolar));
+        }
+        else{
+            lbCobroFinal.setText(TotalCobro+"0");
+        }
+    }//GEN-LAST:event_Cb_dolarItemStateChanged
    
     public void llenarCombo(){
        //Esta funcion sirve para llenar el componente de departamentos con los registros de la base de datos
@@ -3434,7 +3492,6 @@ public class VistaDigo extends javax.swing.JFrame implements Runnable{
         s=Float.parseFloat(lbS1.getText());
         c=Float.parseFloat(lbCaja.getText());
         lbTotalCorte1.setText((c+e-s)+"");
-        
     }
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
@@ -3504,6 +3561,7 @@ public class VistaDigo extends javax.swing.JFrame implements Runnable{
         });
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JCheckBox Cb_dolar;
     private javax.swing.JCheckBox boxCompras;
     private javax.swing.JCheckBox boxConfiguracion;
     private javax.swing.JCheckBox boxCorte;
