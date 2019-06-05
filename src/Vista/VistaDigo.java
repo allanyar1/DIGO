@@ -121,6 +121,7 @@ public class VistaDigo extends javax.swing.JFrame implements Runnable{
         MostrarCorteTemporal();
         llenarCombo();
         calcular_corte();
+        calcular_corte_final();
         //Permisos();
         lbVerificacion.setVisible(false);
         btnSalir.setMnemonic(KeyEvent.VK_END);
@@ -3423,22 +3424,31 @@ public class VistaDigo extends javax.swing.JFrame implements Runnable{
     public void calcular_corte_final(){
         float acum=0;
         float acum2=0;
+        float acum3=0;
         float t,e,s,c;
         for (int cont = 0; cont < tablaCorteTemporal.getRowCount(); cont++) {
             acum=acum+Float.parseFloat(tablaCorteTemporal.getValueAt(cont, 3)+"");
             System.out.println(acum);
         }
-        System.out.println(acum);
+        for (int cont2 = 0; cont2 < tablaCorteTemporal.getRowCount(); cont2++) {
+            acum2=acum2+Float.parseFloat(tablaCorteTemporal.getValueAt(cont2, 1)+"");
+            System.out.println(acum2);
+        }
+        for (int cont3 = 0; cont3 < tablaCorteTemporal.getRowCount(); cont3++) {
+            acum3=acum3+Float.parseFloat(tablaCorteTemporal.getValueAt(cont3, 2)+"");
+            System.out.println(acum3);
+        }
+        
         lbTotalVentas.setText(acum+"");
         
         
-        lbEntradas.setText(acum2+"");
-        lbE.setText(lbEntradas.getText());
-        lbS.setText(lbSalidas.getText());
-        e=Float.parseFloat(lbE.getText());
-        s=Float.parseFloat(lbS.getText());
+       
+        lbE1.setText(acum2+"");
+        lbS1.setText(acum3+"");
+        e=Float.parseFloat(lbE1.getText());
+        s=Float.parseFloat(lbS1.getText());
         c=Float.parseFloat(lbCaja.getText());
-        lbTotalCorte.setText((c+e-s)+"");
+        lbTotalCorte1.setText((c+e-s)+"");
         
     }
     public static void main(String args[]) {
