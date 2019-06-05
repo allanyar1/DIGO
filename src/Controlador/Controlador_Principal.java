@@ -15,12 +15,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
-import javax.swing.JComboBox;
-import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.table.TableModel;
 import net.proteanit.sql.DbUtils;
-import sun.security.util.Password;
 
 public class Controlador_Principal {
 
@@ -149,6 +146,51 @@ public class Controlador_Principal {
         rs = pst.executeQuery();
         return DbUtils.resultSetToTableModel(rs);
     }
+    public TableModel MostrarSalida() throws SQLException {
+        /**
+         * *
+         *
+         * Esta función se utiliza para establecer una conexión entre la base de
+         * datos y la tabla de movimientos de entrada y salida
+         *
+         */
+        PreparedStatement pst;
+        ResultSet rs;
+        String sql = "SELECT Usuario,Fecha,Hora,Total FROM `corte_turno` WHERE Tipo='Salida'";
+        pst = Coneccion().prepareStatement(sql);
+        rs = pst.executeQuery();
+        return DbUtils.resultSetToTableModel(rs);
+    }
+    public TableModel MostrarEntrada() throws SQLException {
+        /**
+         * *
+         *
+         * Esta función se utiliza para establecer una conexión entre la base de
+         * datos y la tabla de movimientos de entrada y salida
+         *
+         */
+        PreparedStatement pst;
+        ResultSet rs;
+        String sql = "SELECT Usuario,Fecha,Hora,Total FROM `corte_turno` WHERE Tipo='Entrada'";
+        pst = Coneccion().prepareStatement(sql);
+        rs = pst.executeQuery();
+        return DbUtils.resultSetToTableModel(rs);
+    }
+    public TableModel MostrarTemporal() throws SQLException {
+        /**
+         * *
+         *
+         * Esta función se utiliza para establecer una conexión entre la base de
+         * datos y la tabla de movimientos de entrada y salida
+         *
+         */
+        PreparedStatement pst;
+        ResultSet rs;
+        String sql = "SELECT Monto_Caja,Entradas,Salidas,Total from corte_temporal";
+        pst = Coneccion().prepareStatement(sql);
+        rs = pst.executeQuery();
+        return DbUtils.resultSetToTableModel(rs);
+    }
 
     public Vector<String> MostrarTablaVentas(int Id) throws SQLException {
         /**
@@ -270,4 +312,15 @@ public class Controlador_Principal {
         }
         return rs;
     }
+    public ResultSet CorteDia() throws SQLException
+    {
+        PreparedStatement pst=null;
+        ResultSet rs;
+        String sql = "SELECT contraseña FROM login WHERE usuario='Admin'";
+        pst = Coneccion().prepareStatement(sql);
+        rs = pst.executeQuery();
+        return rs;
+    }
+   
 }
+

@@ -7,7 +7,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import javax.swing.JTable;
-import sun.security.util.Password;
 
 public class Controlador_Login {
 
