@@ -94,4 +94,33 @@ public class Controlador_Login {
             return "Error al eliminar";
         }
     }
+    public String ModificarUsuario(String usuario, String contra, String nombreUsuario, boolean venta, boolean productos, boolean compras, boolean corte, boolean configuracion) throws SQLException {
+        /**
+         * *
+         *
+         * Esta función sirve para registrar un producto dentro la base de datos
+         *
+         */
+        PreparedStatement pst;
+        try {
+            String sql = "INSERT INTO `login`(`usuario`, `contraseña`, `nombreUsuario`, `permisoVenta`, `permisoProductos`, `permisoCompras`, `permisoCorte`, `permisoConfiguracion`) VALUES (?,?,?,?,?,?,?,?)";
+            pst = Coneccion().prepareStatement(sql);
+            Usuario=new Modelo.Usuario(usuario,contra,nombreUsuario,venta,productos,compras,corte,configuracion);
+            System.out.println(usuario+contra+nombreUsuario+venta+productos+compras+corte+configuracion);
+            pst.setString(1, Usuario.getUsuario());
+            pst.setString(2, Usuario.getContra());
+            pst.setString(3, Usuario.getNombreUsuario());
+            pst.setBoolean(4,Usuario.isVenta() );
+            pst.setBoolean(5, Usuario.isProductos());
+            pst.setBoolean(6, Usuario.isCompras());
+            pst.setBoolean(7, Usuario.isCorte());
+            pst.setBoolean(8, Usuario.isConfiguracion());
+            
+            pst.executeUpdate();
+            return "Modificacion exitosa";
+        } catch (SQLException ex) {
+            return "Error de modi";
+        }
+    }
+    
 }
