@@ -212,9 +212,9 @@ public class Controlador_Principal {
             newRow.add(rs.getString(1));
             newRow.add(rs.getString(2));
             newRow.add(numero + "");
-            newRow.add(rs.getString(3));
+            newRow.add(rs.getString(3)+"0");
             newRow.add(rs.getString(4));
-
+            newRow.add(rs.getString(3)+"0");
         }
         return newRow;
         //return DbUtils.resultSetToTableModel(rs);

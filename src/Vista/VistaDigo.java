@@ -37,6 +37,7 @@ import javax.imageio.ImageIO;
 import javax.swing.Icon;
 import javax.swing.JFileChooser;
 import javax.swing.JPasswordField;
+import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
 public class VistaDigo extends javax.swing.JFrame implements Runnable{
@@ -74,15 +75,9 @@ public class VistaDigo extends javax.swing.JFrame implements Runnable{
     float corte=0;
     public VistaDigo() throws SQLException{
         initComponents();
-       
-        dolarString = JOptionPane.showInputDialog("¿Cual es el valor del dolar?", "");
-        dolar=Double.parseDouble(dolarString);
-        
-        cajaString = JOptionPane.showInputDialog("¿Cuanto dinero hay en caja?", "");
-        caja=Double.parseDouble(cajaString);
-       
-
-        try {
+        DineroDolar();
+        DineroCaja();
+       try {
             cargar();
         } catch (IOException ex) {
             Logger.getLogger(VistaDigo.class.getName()).log(Level.SEVERE, null, ex);
@@ -609,6 +604,28 @@ public class VistaDigo extends javax.swing.JFrame implements Runnable{
 
         lbMinimo.setText("Mínimo ");
 
+        txtHay.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                txtHayFocusLost(evt);
+            }
+        });
+        txtHay.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtHayKeyTyped(evt);
+            }
+        });
+
+        txtMinimo.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                txtMinimoFocusLost(evt);
+            }
+        });
+        txtMinimo.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtMinimoKeyTyped(evt);
+            }
+        });
+
         javax.swing.GroupLayout panelInventarioRegLayout = new javax.swing.GroupLayout(panelInventarioReg);
         panelInventarioReg.setLayout(panelInventarioRegLayout);
         panelInventarioRegLayout.setHorizontalGroup(
@@ -735,6 +752,14 @@ public class VistaDigo extends javax.swing.JFrame implements Runnable{
                 .addGroup(panelProductosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(panelProductosLayout.createSequentialGroup()
                         .addGroup(panelProductosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(panelInventarioReg, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(panelProductosLayout.createSequentialGroup()
+                                .addComponent(btnGuardarProducto, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(btnActualizar, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addContainerGap(977, Short.MAX_VALUE))
+                    .addGroup(panelProductosLayout.createSequentialGroup()
+                        .addGroup(panelProductosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(boxInventario)
                             .addGroup(panelProductosLayout.createSequentialGroup()
                                 .addGroup(panelProductosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -768,22 +793,16 @@ public class VistaDigo extends javax.swing.JFrame implements Runnable{
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                         .addComponent(radioPaquete))
                                     .addComponent(txtPrecioVenta, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 175, Short.MAX_VALUE)
                         .addGroup(panelProductosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 795, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelProductosLayout.createSequentialGroup()
                                 .addComponent(btnModProducto, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(163, 163, 163)
                                 .addComponent(btnElimProducto, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(153, 153, 153))))
-                    .addGroup(panelProductosLayout.createSequentialGroup()
-                        .addGroup(panelProductosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(panelInventarioReg, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(panelProductosLayout.createSequentialGroup()
-                                .addComponent(btnGuardarProducto, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(btnActualizar, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addContainerGap(977, Short.MAX_VALUE))))
+                                .addGap(153, 153, 153))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelProductosLayout.createSequentialGroup()
+                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 795, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(45, 45, 45))))))
         );
         panelProductosLayout.setVerticalGroup(
             panelProductosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -839,7 +858,7 @@ public class VistaDigo extends javax.swing.JFrame implements Runnable{
                 .addGroup(panelProductosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnGuardarProducto, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnActualizar, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(58, Short.MAX_VALUE))
+                .addContainerGap(88, Short.MAX_VALUE))
         );
 
         panePrincipal.addTab("Módulo de productos", panelProductos);
@@ -893,26 +912,26 @@ public class VistaDigo extends javax.swing.JFrame implements Runnable{
 
         tablaVentas.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null}
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null}
             },
             new String [] {
-                "Codigo de producto", "Descripcion", "Cantidad", "Precio de Venta", "Existencia"
+                "Codigo de producto", "Descripcion", "Cantidad", "Precio de Venta", "Existencia", "Subtotal"
             }
         ));
         jScrollPane4.setViewportView(tablaVentas);
@@ -1850,24 +1869,32 @@ public class VistaDigo extends javax.swing.JFrame implements Runnable{
 
         lbMinimoB.setText("Mínimo");
 
+        txtExistenciaInv.setEditable(false);
         txtExistenciaInv.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 txtExistenciaInvKeyTyped(evt);
             }
         });
 
+        txtPrecioVentaInv.setEditable(false);
         txtPrecioVentaInv.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 txtPrecioVentaInvKeyTyped(evt);
             }
         });
 
+        txtMinimoInv.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                txtMinimoInvFocusLost(evt);
+            }
+        });
         txtMinimoInv.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 txtMinimoInvKeyTyped(evt);
             }
         });
 
+        txtPrecioCostoInv.setEditable(false);
         txtPrecioCostoInv.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 txtPrecioCostoInvKeyTyped(evt);
@@ -2218,13 +2245,13 @@ public class VistaDigo extends javax.swing.JFrame implements Runnable{
 
     private void btnSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalirActionPerformed
       //Este evento sirve para salir del sistema 
-        int resp = JOptionPane.showConfirmDialog(null, "¿Está seguro se salir del sistema?");
-        VistaLogin vista = new VistaLogin();
+       int resp = JOptionPane.showConfirmDialog(null, "¿Está seguro se salir del sistema?","Confirmar salida",JOptionPane.YES_NO_OPTION);
+       VistaLogin vista = new VistaLogin();
        if(resp==0){
-            vista.setVisible(true);
-            this.setVisible(false);
+           
+           vista.setVisible(true);
+           this.setVisible(false);
        }
-       
     }//GEN-LAST:event_btnSalirActionPerformed
 
     private void btnVentaKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_btnVentaKeyPressed
@@ -2566,8 +2593,8 @@ public class VistaDigo extends javax.swing.JFrame implements Runnable{
     }//GEN-LAST:event_btnEliminarDepartamentoActionPerformed
 
     private void txtIdFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtIdFocusLost
+        // Este es el desenfoque del Id de productos que verifica que existe el ID
         try {
-            // Este es el desenfoque del Id de productos que verifica que existe el ID
             int Id=Integer.parseInt(txtId.getText());
             tablaProductos.setModel(ConArt.RevisarId(Id));
             if(tablaProductos.getRowCount() !=0){
@@ -2575,11 +2602,18 @@ public class VistaDigo extends javax.swing.JFrame implements Runnable{
                 txtId.setText("");
                 lbVerificacion.setVisible(false);
             }else{
-                lbVerificacion.setVisible(true);
+                if(ValidarPositivos(Id))
+                    txtId.setText("");
+                else
+                    lbVerificacion.setVisible(true);
             }
             MostrarTablaProductos();
+//            if(ValidarPositivos(Id)){
+//                txtId.setText("");
+//            }
         } catch (SQLException ex) {
             Logger.getLogger(VistaDigo.class.getName()).log(Level.SEVERE, null, ex);
+        } catch(NumberFormatException ex){
         }
     }//GEN-LAST:event_txtIdFocusLost
 
@@ -2610,6 +2644,9 @@ public class VistaDigo extends javax.swing.JFrame implements Runnable{
         {
             JOptionPane.showMessageDialog(null, "Este articulo no existe", "Articulo inexistente", JOptionPane.WARNING_MESSAGE);
             txtIdVenta.setText("");
+        }catch(NumberFormatException ex)
+        {
+            JOptionPane.showMessageDialog(null, "Ingrese articulo", "No se ingreso articulo", JOptionPane.WARNING_MESSAGE);
         }
     }//GEN-LAST:event_btnIdAgregarActionPerformed
 
@@ -2650,6 +2687,8 @@ public class VistaDigo extends javax.swing.JFrame implements Runnable{
         respuesta=JOptionPane.showInputDialog(null, "Por favor, pague: "+lbCobroFinal.getText()+" pesos", "Cobro", JOptionPane.INFORMATION_MESSAGE);
         if(respuesta!=null)
         {
+            DecimalFormat df = new DecimalFormat("0.00");
+            df.setRoundingMode(RoundingMode.UP);
             try {
                 Float pago = Float.parseFloat(respuesta);
                 if(pago<Float.parseFloat(lbCobroFinal.getText()))
@@ -2659,7 +2698,7 @@ public class VistaDigo extends javax.swing.JFrame implements Runnable{
                     Double cambio = pago-Double.parseDouble(lbCobroFinal.getText());
                     if(Cb_dolar.isSelected())
                         cambio=cambio*dolar;
-                    JOptionPane.showMessageDialog(null, "Su cambio es de: $"+cambio+"0 pesos", "Cobro", JOptionPane.INFORMATION_MESSAGE);
+                    JOptionPane.showMessageDialog(null, "Su cambio es de: $"+df.format(cambio)+"0 pesos", "Cobro", JOptionPane.INFORMATION_MESSAGE);
 
                     int Id=ConVen.CalcularId();
                     java.util.Calendar fecha = new java.util.GregorianCalendar();
@@ -2719,7 +2758,7 @@ public class VistaDigo extends javax.swing.JFrame implements Runnable{
 
                     },
                     new String [] {
-                        "Codigo de producto", "Descripcion", "Cantidad", "Precio de Venta", "Existencia"
+                        "Codigo de producto", "Descripcion", "Cantidad", "Precio de Venta", "Existencia", "Subtotal"
                     }));
                     ii=0;
                     ConCor.regCorte(usuario,fecha2,hora,tipo,corte);
@@ -2746,7 +2785,7 @@ public class VistaDigo extends javax.swing.JFrame implements Runnable{
         // Esta funcion sirve para eliminar un producto dentro de las ventas
         int Fila = tablaVentas.getSelectedRow();
         if (Fila >= 0) {
-            lbCobroFinal.setText(ConPri.Restar(Float.parseFloat(lbCobroFinal.getText()), Float.parseFloat((String) tablaVentas.getValueAt(Fila, 3)))+"0");
+            lbCobroFinal.setText(ConPri.Restar(Float.parseFloat(lbCobroFinal.getText()), Float.parseFloat((String) tablaVentas.getValueAt(Fila, 5)))+"0");
             Object[] ObVacio = null;
             DefaultTableModel modelodel = (DefaultTableModel) tablaVentas.getModel();
             modelodel.removeRow(Fila);
@@ -2759,28 +2798,13 @@ public class VistaDigo extends javax.swing.JFrame implements Runnable{
 
     private void txtIdKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtIdKeyTyped
         // Validacion de solo numeros
-        int k=(int)evt.getKeyChar();
-        if (k >= 97 && k <= 122 || k>=65 && k<=90){
-        evt.setKeyChar((char)KeyEvent.VK_CLEAR);
-        JOptionPane.showMessageDialog(null,"No puede ingresar letras!!!","Ventana Error Datos",JOptionPane.ERROR_MESSAGE);
-        }
-        if(k==241 || k==209){
-        evt.setKeyChar((char)KeyEvent.VK_CLEAR);
-        JOptionPane.showMessageDialog(null,"No puede ingresar letras!!!","Ventana Error Datos",JOptionPane.ERROR_MESSAGE);
-}
+        ValidarLetras(evt);
+        //ValidarPositivos(Integer.parseInt(txtId.getText()));
     }//GEN-LAST:event_txtIdKeyTyped
 
     private void txtPrecioCostoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPrecioCostoKeyTyped
         // Validar solo numero
-         int k=(int)evt.getKeyChar();
-        if (k >= 97 && k <= 122 || k>=65 && k<=90){
-        evt.setKeyChar((char)KeyEvent.VK_CLEAR);
-        JOptionPane.showMessageDialog(null,"No puede ingresar letras!!!","Ventana Error Datos",JOptionPane.ERROR_MESSAGE);
-        }
-        if(k==241 || k==209){
-        evt.setKeyChar((char)KeyEvent.VK_CLEAR);
-        JOptionPane.showMessageDialog(null,"No puede ingresar letras!!!","Ventana Error Datos",JOptionPane.ERROR_MESSAGE);
-}
+        ValidarLetras(evt);
     }//GEN-LAST:event_txtPrecioCostoKeyTyped
 
     private void txtIdInventarioBKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtIdInventarioBKeyTyped
@@ -2790,80 +2814,32 @@ public class VistaDigo extends javax.swing.JFrame implements Runnable{
 
     private void txtNuevaCantidadKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNuevaCantidadKeyTyped
         // Validar solo numeros
-         int k=(int)evt.getKeyChar();
-        if (k >= 97 && k <= 122 || k>=65 && k<=90){
-        evt.setKeyChar((char)KeyEvent.VK_CLEAR);
-        JOptionPane.showMessageDialog(null,"No puede ingresar letras!!!","Ventana Error Datos",JOptionPane.ERROR_MESSAGE);
-        }
-        if(k==241 || k==209){
-        evt.setKeyChar((char)KeyEvent.VK_CLEAR);
-        JOptionPane.showMessageDialog(null,"No puede ingresar letras!!!","Ventana Error Datos",JOptionPane.ERROR_MESSAGE);
-        }
+        ValidarLetras(evt);
     }//GEN-LAST:event_txtNuevaCantidadKeyTyped
 
     private void txtMinimoInvKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtMinimoInvKeyTyped
         // Validar solo numeros
-         int k=(int)evt.getKeyChar();
-        if (k >= 97 && k <= 122 || k>=65 && k<=90){
-        evt.setKeyChar((char)KeyEvent.VK_CLEAR);
-        JOptionPane.showMessageDialog(null,"No puede ingresar letras!!!","Ventana Error Datos",JOptionPane.ERROR_MESSAGE);
-        }
-        if(k==241 || k==209){
-        evt.setKeyChar((char)KeyEvent.VK_CLEAR);
-        JOptionPane.showMessageDialog(null,"No puede ingresar letras!!!","Ventana Error Datos",JOptionPane.ERROR_MESSAGE);
-        }
+        ValidarLetras(evt);
     }//GEN-LAST:event_txtMinimoInvKeyTyped
 
     private void txtExistenciaInvKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtExistenciaInvKeyTyped
         // Validar solo numeros
-         int k=(int)evt.getKeyChar();
-        if (k >= 97 && k <= 122 || k>=65 && k<=90){
-        evt.setKeyChar((char)KeyEvent.VK_CLEAR);
-        JOptionPane.showMessageDialog(null,"No puede ingresar letras!!!","Ventana Error Datos",JOptionPane.ERROR_MESSAGE);
-        }
-        if(k==241 || k==209){
-        evt.setKeyChar((char)KeyEvent.VK_CLEAR);
-        JOptionPane.showMessageDialog(null,"No puede ingresar letras!!!","Ventana Error Datos",JOptionPane.ERROR_MESSAGE);
-        }
+        ValidarLetras(evt);
     }//GEN-LAST:event_txtExistenciaInvKeyTyped
 
     private void txtPrecioCostoInvKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPrecioCostoInvKeyTyped
         // Validar solo numeros
-         int k=(int)evt.getKeyChar();
-        if (k >= 97 && k <= 122 || k>=65 && k<=90){
-        evt.setKeyChar((char)KeyEvent.VK_CLEAR);
-        JOptionPane.showMessageDialog(null,"No puede ingresar letras!!!","Ventana Error Datos",JOptionPane.ERROR_MESSAGE);
-        }
-        if(k==241 || k==209){
-        evt.setKeyChar((char)KeyEvent.VK_CLEAR);
-        JOptionPane.showMessageDialog(null,"No puede ingresar letras!!!","Ventana Error Datos",JOptionPane.ERROR_MESSAGE);
-        }
+        ValidarLetras(evt);
     }//GEN-LAST:event_txtPrecioCostoInvKeyTyped
 
     private void txtPrecioVentaInvKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPrecioVentaInvKeyTyped
         // Validar solo numeros
-        int k=(int)evt.getKeyChar();
-        if (k >= 97 && k <= 122 || k>=65 && k<=90){
-        evt.setKeyChar((char)KeyEvent.VK_CLEAR);
-        JOptionPane.showMessageDialog(null,"No puede ingresar letras!!!","Ventana Error Datos",JOptionPane.ERROR_MESSAGE);
-        }
-        if(k==241 || k==209){
-        evt.setKeyChar((char)KeyEvent.VK_CLEAR);
-        JOptionPane.showMessageDialog(null,"No puede ingresar letras!!!","Ventana Error Datos",JOptionPane.ERROR_MESSAGE);
-        }
+        ValidarLetras(evt);
     }//GEN-LAST:event_txtPrecioVentaInvKeyTyped
 
     private void txtIdVentaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtIdVentaKeyTyped
         // Validar solo numeros 
-        int k=(int)evt.getKeyChar();
-        if (k >= 97 && k <= 122 || k>=65 && k<=90){
-        evt.setKeyChar((char)KeyEvent.VK_CLEAR);
-        JOptionPane.showMessageDialog(null,"No puede ingresar letras!!!","Ventana Error Datos",JOptionPane.ERROR_MESSAGE);
-        }
-        if(k==241 || k==209){
-        evt.setKeyChar((char)KeyEvent.VK_CLEAR);
-        JOptionPane.showMessageDialog(null,"No puede ingresar letras!!!","Ventana Error Datos",JOptionPane.ERROR_MESSAGE);
-        }
+        ValidarLetras(evt);
     }//GEN-LAST:event_txtIdVentaKeyTyped
 
     private void btnMasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMasActionPerformed
@@ -2873,6 +2849,7 @@ public class VistaDigo extends javax.swing.JFrame implements Runnable{
             {
                 int cantidad = Integer.parseInt(tablaVentas.getValueAt(ii-1, 2)+"")+1;
                 tablaVentas.setValueAt(cantidad, ii-1, 2);
+                tablaVentas.setValueAt(cantidad*Float.parseFloat(tablaVentas.getValueAt(ii-1, 3)+"")+"0", ii-1, 5);
                 lbCobroFinal.setText((ConPri.SumarProducto(Float.parseFloat(lbCobroFinal.getText()), Float.parseFloat(tablaVentas.getValueAt(ii-1, 3)+"")))+"0");
             }
     }//GEN-LAST:event_btnMasActionPerformed
@@ -2886,6 +2863,7 @@ public class VistaDigo extends javax.swing.JFrame implements Runnable{
             {
                 int cantidad = Integer.parseInt(tablaVentas.getValueAt(ii-1, 2)+"")-1;
                 tablaVentas.setValueAt(cantidad, ii-1, 2);
+                tablaVentas.setValueAt(cantidad*Float.parseFloat(tablaVentas.getValueAt(ii-1, 3)+"")+"0", ii-1, 5);
                 lbCobroFinal.setText((ConPri.RestarProducto(Float.parseFloat(lbCobroFinal.getText()), Float.parseFloat(tablaVentas.getValueAt(ii-1, 3)+"")))+"0");
             }
         }
@@ -3175,6 +3153,43 @@ public class VistaDigo extends javax.swing.JFrame implements Runnable{
             lbCobroFinal.setText(TotalCobro+"0");
         }
     }//GEN-LAST:event_Cb_dolarItemStateChanged
+
+    private void txtHayFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtHayFocusLost
+        // TODO add your handling code here:
+        try{
+            if(ValidarPositivos(Integer.parseInt(txtHay.getText())))
+                txtHay.setText("");
+        }catch(NumberFormatException ex){
+        }
+    }//GEN-LAST:event_txtHayFocusLost
+
+    private void txtMinimoFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtMinimoFocusLost
+        // TODO add your handling code here:
+        try{
+            if(ValidarPositivos(Integer.parseInt(txtMinimo.getText())))
+                txtMinimo.setText("");
+        }catch(NumberFormatException ex){
+        }
+    }//GEN-LAST:event_txtMinimoFocusLost
+
+    private void txtHayKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtHayKeyTyped
+        // TODO add your handling code here:
+        ValidarLetras(evt);
+    }//GEN-LAST:event_txtHayKeyTyped
+
+    private void txtMinimoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtMinimoKeyTyped
+        // TODO add your handling code here:
+        ValidarLetras(evt);
+    }//GEN-LAST:event_txtMinimoKeyTyped
+
+    private void txtMinimoInvFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtMinimoInvFocusLost
+        // TODO add your handling code here:
+        try{
+            if(ValidarPositivos(Integer.parseInt(txtMinimoInv.getText())))
+                txtMinimoInv.setText("");
+        }catch(NumberFormatException ex){
+        }
+    }//GEN-LAST:event_txtMinimoInvFocusLost
    
     public void llenarCombo(){
        //Esta funcion sirve para llenar el componente de departamentos con los registros de la base de datos
@@ -3241,7 +3256,7 @@ public class VistaDigo extends javax.swing.JFrame implements Runnable{
         DefaultTableModel modeloinsert = (DefaultTableModel) tablaVentas.getModel();
         Vector <String> Fila=ConPri.MostrarTablaVentas(Id);
         modeloinsert.insertRow(ii, Fila);
-       
+        
         lbCobroFinal.setText(""+ConPri.Total(Float.parseFloat(lbCobroFinal.getText()), Float.parseFloat(Fila.elementAt(3)))+"0");
 //        float x=ConPri.Total(Float.parseFloat(lbCobroFinal.getText()), Float.parseFloat(Fila.elementAt(3)));
 //        float y=Float.parseFloat(Fila.elementAt(2));
@@ -3492,6 +3507,70 @@ public class VistaDigo extends javax.swing.JFrame implements Runnable{
         s=Float.parseFloat(lbS1.getText());
         c=Float.parseFloat(lbCaja.getText());
         lbTotalCorte1.setText((c+e-s)+"");
+    }
+    public boolean ValidarPositivos(int num)
+    {
+        if(num <= 0){
+            JOptionPane.showMessageDialog(null,"No se permite ingresar numeros negativos","Ventana Error Datos",JOptionPane.ERROR_MESSAGE);
+            return true;
+        }
+        else
+            return false;
+    }
+    public boolean ValidarPositivos(Float num)
+    {
+        if(num <= 0){
+            JOptionPane.showMessageDialog(null,"No se permite ingresar numeros negativos","Ventana Error Datos",JOptionPane.ERROR_MESSAGE);
+            return true;
+        }
+        else
+            return false;
+    }
+    public boolean ValidarPositivos(Double num)
+    {
+        if(num <= 0){
+            JOptionPane.showMessageDialog(null,"No se permite ingresar numeros negativos","Ventana Error Datos",JOptionPane.ERROR_MESSAGE);
+            return true;
+        }
+        else
+            return false;
+    }
+    public boolean ValidarLetras(java.awt.event.KeyEvent evt)
+    {
+        int k=(int)evt.getKeyChar();
+        if (k >= 97 && k <= 122 || k>=65 && k<=90 || k==241 || k==209){
+            evt.setKeyChar((char)KeyEvent.VK_CLEAR);
+            JOptionPane.showMessageDialog(null,"No se permite ingresar letras","Ventana Error Datos",JOptionPane.ERROR_MESSAGE);
+            return true;
+        }
+        else
+            return false;
+    }
+    public void DineroDolar()
+    {
+        try{
+            dolarString = JOptionPane.showInputDialog("¿Cual es el valor del dolar?", "");
+            if(!ValidarPositivos(Double.parseDouble(dolarString)))
+                dolar=Double.parseDouble(dolarString);
+            else
+                DineroDolar();
+        }catch(NumberFormatException ex){
+            JOptionPane.showMessageDialog(null, "Escriba numeros", "Error numerico", JOptionPane.ERROR_MESSAGE);
+            DineroDolar();
+        }
+    }
+    public void DineroCaja()
+    {
+        try{
+            cajaString = JOptionPane.showInputDialog("¿Cuanto dinero hay en caja?", "");
+            if(!ValidarPositivos(Double.parseDouble(cajaString)))
+                caja=Double.parseDouble(cajaString);
+            else
+                DineroCaja();
+        }catch(NumberFormatException ex){
+            JOptionPane.showMessageDialog(null, "Escriba numeros", "Error numerico", JOptionPane.ERROR_MESSAGE);
+            DineroCaja();
+        }
     }
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
