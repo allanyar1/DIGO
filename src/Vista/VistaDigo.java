@@ -2350,7 +2350,7 @@ public class VistaDigo extends javax.swing.JFrame implements Runnable{
         //Se manda a llamar la funcion que verifica si los espacios estan vacios
         validarReg();
         try {
-            int Id, Existencia, Minimo, Departamento;
+            int Id, Existencia, Minimo, Departamento = 0;
             String Descripcion, TipoVenta = null;
             float Costo, Venta;
             Id=Integer.parseInt(txtId.getText());
@@ -2363,8 +2363,11 @@ public class VistaDigo extends javax.swing.JFrame implements Runnable{
                 TipoVenta = radioPaquete.getText();
             Costo = Float.parseFloat(txtPrecioCosto.getText());
             Venta = Float.parseFloat(txtPrecioVenta.getText());
-           
-            Departamento=ConDep.Departamento((String) boxDepartamento.getSelectedItem());
+            ResultSet result = ConDep.Departamento((String) boxDepartamento.getSelectedItem());
+            while(result.next())
+                {
+                    Departamento=result.getInt(1);
+                }
             //Se manda a llamar al controlador para hacer un registro de productos
           
             if(!boxInventario.isSelected()){
@@ -2530,6 +2533,7 @@ public class VistaDigo extends javax.swing.JFrame implements Runnable{
         try {
             // Esta funcion sirve para actualizar los cambios hechos en los productos
             String select = null;
+            int Departamento=0;
             if(radioUnidad.isSelected()){
                 select=radioUnidad.getText();
             }
@@ -2539,7 +2543,12 @@ public class VistaDigo extends javax.swing.JFrame implements Runnable{
             if(radioPaquete.isSelected()){
                 select=radioPaquete.getText();
             }
-            JOptionPane.showMessageDialog(null, ConArt.ActualizarProducto(Integer.parseInt(txtId.getText()), txtDescripcion.getText(), select, Float.parseFloat(txtPrecioCosto.getText()), Float.parseFloat(txtPrecioVenta.getText()), ConDep.Departamento((String) boxDepartamento.getSelectedItem())));
+            ResultSet result = ConDep.Departamento((String) boxDepartamento.getSelectedItem());
+            while(result.next())
+                {
+                    Departamento=result.getInt(1);
+                }
+            JOptionPane.showMessageDialog(null, ConArt.ActualizarProducto(Integer.parseInt(txtId.getText()), txtDescripcion.getText(), select, Float.parseFloat(txtPrecioCosto.getText()), Float.parseFloat(txtPrecioVenta.getText()), Departamento));
             MostrarTablaProductos();
             txtId.setEnabled(true);
             txtId.setText("");
@@ -3199,6 +3208,7 @@ public class VistaDigo extends javax.swing.JFrame implements Runnable{
     }
     public void agregarDepartamento() throws SQLException{
         int Ultimo=tablaDepartamentos.getRowCount();
+        System.out.println(Ultimo);
         JOptionPane.showMessageDialog(null, ConDep.RegistrarDepartamento(Ultimo, txtNuevoDepartamento.getText()));
         MostrarTablaDepartamentos();
     }

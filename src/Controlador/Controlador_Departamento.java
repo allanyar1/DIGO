@@ -25,8 +25,15 @@ public class Controlador_Departamento {
         return DriverManager.getConnection("jdbc:mysql://localhost/DigoV?useSSL=false", "root", "password");
     }
 
-    public int Departamento(String Depa) {
-        return Departamento.getDepartamento(Depa);
+    public ResultSet Departamento(String Depa) throws SQLException {
+        //return Departamento.getDepartamento(Depa);
+        PreparedStatement pst;
+        ResultSet rs;
+        String sql = "SELECT `id_departamentos` FROM `departamentos` WHERE `departamento`=?";
+        pst = Coneccion().prepareStatement(sql);
+        pst.setString(1, Depa);
+        rs = pst.executeQuery();
+        return rs;
     }
 
     public String EliminarDepartamento(int fila, JTable tablaDepartamentos) {
