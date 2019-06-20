@@ -75,7 +75,7 @@ public class Controlador_Login {
             return "Error de registro";
         }
     }
-    public String EliminarUsuario(int fila, JTable tablaUsuario) {
+    public String EliminarUsuario(String usuario) {
         /**
          * *
          *
@@ -85,13 +85,32 @@ public class Controlador_Login {
          */
         try {
             PreparedStatement pst;
-            String sql = "DELETE FROM login WHERE nombreUsuario=?";
+            String sql = "DELETE FROM `login` WHERE `login`.`usuario` = ?";
             pst = Coneccion().prepareStatement(sql);
-            pst.setString(1, tablaUsuario.getValueAt(fila, 0).toString());
+            pst.setString(1, usuario);
             pst.executeUpdate();
             return "Se borro el Usuario exitosamente";
         } catch (SQLException ex) {
             return "Error al eliminar";
+        }
+    }
+    public String ModificarUsuario(String Usuario, String contra, String nombre, boolean venta, boolean productos, boolean compras, boolean corte, boolean configuracion){
+        try{
+            PreparedStatement pst;
+            String sql ="UPDATE `login` SET `contraseña`=?,`nombreUsuario`=?,`permisoVenta`=?,`permisoProductos`=?,`permisoCompras`=?,`permisoCorte`=?,`permisoConfiguracion`=? WHERE `usuario`=?";
+            pst = Coneccion().prepareStatement(sql);
+            pst.setString(1, contra);
+            pst.setString(2, nombre);
+            pst.setBoolean(3, venta);
+            pst.setBoolean(4, productos);
+            pst.setBoolean(5, compras);
+            pst.setBoolean(6, corte);
+            pst.setBoolean(7, configuracion);
+            pst.setString(8, Usuario);
+            pst.executeUpdate();
+            return "Se modifico usuario correctamente";
+        }catch(SQLException ex){
+            return "Error al modificar usuario";
         }
     }
 }

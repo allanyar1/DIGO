@@ -68,6 +68,8 @@ public class VistaDigo extends javax.swing.JFrame implements Runnable{
     String cajaString;
     double caja;
     float corte=0;
+    boolean BanderaUsuario = false;
+    boolean BanderaModificarUsuario = false;
     public VistaDigo() throws SQLException{
         initComponents();
         DineroDolar();
@@ -263,7 +265,7 @@ public class VistaDigo extends javax.swing.JFrame implements Runnable{
         boxCompras = new javax.swing.JCheckBox();
         boxCorte = new javax.swing.JCheckBox();
         boxConfiguracion = new javax.swing.JCheckBox();
-        btnCrearUsuario = new javax.swing.JButton();
+        btnModificarUsuario = new javax.swing.JButton();
         jScrollPane8 = new javax.swing.JScrollPane();
         tablaUsuarios = new javax.swing.JTable();
         panelImpuestos = new javax.swing.JPanel();
@@ -1084,6 +1086,12 @@ public class VistaDigo extends javax.swing.JFrame implements Runnable{
             }
         });
 
+        txtUsuarioNuevo.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                txtUsuarioNuevoFocusLost(evt);
+            }
+        });
+
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder("Permisos"));
 
         boxVentas.setText("Ventas");
@@ -1098,6 +1106,11 @@ public class VistaDigo extends javax.swing.JFrame implements Runnable{
         boxCompras.setText("Compras");
 
         boxCorte.setText("Corte de caja");
+        boxCorte.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                boxCorteActionPerformed(evt);
+            }
+        });
 
         boxConfiguracion.setText("Configuracion");
 
@@ -1133,8 +1146,13 @@ public class VistaDigo extends javax.swing.JFrame implements Runnable{
                 .addContainerGap(31, Short.MAX_VALUE))
         );
 
-        btnCrearUsuario.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/iconoNuevoUsuario.png"))); // NOI18N
-        btnCrearUsuario.setText("Nuevo Usuario");
+        btnModificarUsuario.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/iconoNuevoUsuario.png"))); // NOI18N
+        btnModificarUsuario.setText("Modificar Usuario");
+        btnModificarUsuario.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnModificarUsuarioActionPerformed(evt);
+            }
+        });
 
         tablaUsuarios.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -1155,35 +1173,31 @@ public class VistaDigo extends javax.swing.JFrame implements Runnable{
             panelAdmiUsuariosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelAdmiUsuariosLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane8, javax.swing.GroupLayout.PREFERRED_SIZE, 295, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addComponent(jScrollPane8, javax.swing.GroupLayout.PREFERRED_SIZE, 440, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(panelAdmiUsuariosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(panelAdmiUsuariosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addGroup(panelAdmiUsuariosLayout.createSequentialGroup()
-                            .addComponent(btnCrearUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 169, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGap(18, 18, 18)
-                            .addComponent(btnEliminarUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(panelAdmiUsuariosLayout.createSequentialGroup()
-                            .addGap(57, 57, 57)
-                            .addGroup(panelAdmiUsuariosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addGroup(panelAdmiUsuariosLayout.createSequentialGroup()
-                                    .addGroup(panelAdmiUsuariosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(lbContraseña)
-                                        .addComponent(lbUsuarioNuevo))
-                                    .addGap(41, 41, 41)
-                                    .addGroup(panelAdmiUsuariosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                        .addComponent(txtUsuarioNuevo, javax.swing.GroupLayout.PREFERRED_SIZE, 225, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(txtContraseñaNueva, javax.swing.GroupLayout.PREFERRED_SIZE, 225, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                .addGroup(panelAdmiUsuariosLayout.createSequentialGroup()
-                                    .addComponent(lbNombreCompleto)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addComponent(txtNombreCompleto, javax.swing.GroupLayout.PREFERRED_SIZE, 226, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                    .addGroup(panelAdmiUsuariosLayout.createSequentialGroup()
+                        .addComponent(btnModificarUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 169, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnEliminarUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(panelAdmiUsuariosLayout.createSequentialGroup()
+                        .addGroup(panelAdmiUsuariosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(lbContraseña)
+                            .addComponent(lbUsuarioNuevo))
+                        .addGap(41, 41, 41)
+                        .addGroup(panelAdmiUsuariosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(txtUsuarioNuevo, javax.swing.GroupLayout.PREFERRED_SIZE, 225, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtContraseñaNueva, javax.swing.GroupLayout.PREFERRED_SIZE, 225, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(panelAdmiUsuariosLayout.createSequentialGroup()
+                        .addComponent(lbNombreCompleto)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txtNombreCompleto, javax.swing.GroupLayout.PREFERRED_SIZE, 226, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(panelAdmiUsuariosLayout.createSequentialGroup()
                         .addComponent(btnGuardarUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(btnCancelarUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 138, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(607, Short.MAX_VALUE))
+                .addContainerGap(521, Short.MAX_VALUE))
         );
         panelAdmiUsuariosLayout.setVerticalGroup(
             panelAdmiUsuariosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1192,7 +1206,7 @@ public class VistaDigo extends javax.swing.JFrame implements Runnable{
                 .addGroup(panelAdmiUsuariosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(panelAdmiUsuariosLayout.createSequentialGroup()
                         .addGroup(panelAdmiUsuariosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(btnCrearUsuario)
+                            .addComponent(btnModificarUsuario)
                             .addComponent(btnEliminarUsuario, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addGap(18, 18, 18)
                         .addGroup(panelAdmiUsuariosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -1213,7 +1227,7 @@ public class VistaDigo extends javax.swing.JFrame implements Runnable{
                             .addComponent(btnGuardarUsuario)
                             .addComponent(btnCancelarUsuario)))
                     .addComponent(jScrollPane8, javax.swing.GroupLayout.PREFERRED_SIZE, 405, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(56, Short.MAX_VALUE))
+                .addContainerGap(45, Short.MAX_VALUE))
         );
 
         paneConfiguracion.addTab("Administrar Usuarios", panelAdmiUsuarios);
@@ -2939,34 +2953,55 @@ public class VistaDigo extends javax.swing.JFrame implements Runnable{
 
     private void btnGuardarUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarUsuarioActionPerformed
         // Esta funcion guarda los datos de un nuevo cajero
-        String usuario=txtUsuarioNuevo.getText();
-        String contra=txtContraseñaNueva.getText();
-        String nombreUsuario=txtNombreCompleto.getText();
-        boolean venta=boxVentas.isSelected();
-        boolean productos=boxProductos.isSelected();
-        boolean compras=boxCompras.isSelected();
-        boolean cortet=boxCorte.isSelected();
-        boolean configuracion=boxConfiguracion.isSelected();
-        
-        if(txtUsuarioNuevo.getText().equals("")|| txtContraseñaNueva.getText().equals("") || txtNombreCompleto.getText().equals("")){
-            JOptionPane.showMessageDialog(null,"Debe de llenar todos los espacios");
+        JPasswordField pf = new JPasswordField();
+        int resp=JOptionPane.showConfirmDialog(null, pf, "Ingrese contraseña de administrador",JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+        if (resp == JOptionPane.OK_OPTION) {
+            try {
+                String password = new String(pf.getPassword());
+                ResultSet result = ConPri.VerificarAdmin();
+                String pass="";
+                while(result.next())
+                {
+                    pass=result.getString(1);
+                }
+                if(password.equals(pass)){
+                    String usuario=txtUsuarioNuevo.getText();
+                    String contra=txtContraseñaNueva.getText();
+                    String nombreUsuario=txtNombreCompleto.getText();
+                    boolean venta=boxVentas.isSelected();
+                    boolean productos=boxProductos.isSelected();
+                    boolean compras=boxCompras.isSelected();
+                    boolean cortet=boxCorte.isSelected();
+                    boolean configuracion=boxConfiguracion.isSelected();        
+                    if(txtUsuarioNuevo.getText().equals("")|| txtContraseñaNueva.getText().equals("") || txtNombreCompleto.getText().equals("")){
+                        JOptionPane.showMessageDialog(null,"Debe de llenar todos los espacios");
+                    }
+                    else{
+                        if(!BanderaModificarUsuario)
+                            JOptionPane.showMessageDialog(null,ConLog.RegistrarUsuario(usuario, contra, nombreUsuario, venta, productos, compras, cortet, configuracion));
+                        else{
+                            JOptionPane.showMessageDialog(null,ConLog.ModificarUsuario(usuario, contra, nombreUsuario, venta, productos, compras, cortet, configuracion));
+                            txtUsuarioNuevo.setEditable(true);
+                        }
+                        MostrarTablaUsuarios();
+                        txtUsuarioNuevo.setText("");
+                        txtContraseñaNueva.setText("");
+                        txtNombreCompleto.setText("");
+                        boxVentas.setSelected(false);
+                        boxProductos.setSelected(false);
+                        boxCompras.setSelected(false);
+                        boxCorte.setSelected(false);
+                        boxConfiguracion.setSelected(false);
+                        BanderaUsuario = false;
+                        BanderaModificarUsuario = false;
+                    }
+                }
+                else{
+                    JOptionPane.showMessageDialog(null,"Contraseña incorrecta");
+                }
+            } catch (SQLException ex) {
+            }
         }
-        else{
-        try {
-            JOptionPane.showMessageDialog(null,ConLog.RegistrarUsuario(usuario, contra, nombreUsuario, venta, productos, compras, cortet, configuracion));
-            MostrarTablaUsuarios();
-            txtUsuarioNuevo.setText("");
-            txtContraseñaNueva.setText("");
-            txtNombreCompleto.setText("");
-            boxVentas.setSelected(false);
-            boxProductos.setSelected(false);
-            boxCompras.setSelected(false);
-            boxCorte.setSelected(false);
-            boxConfiguracion.setSelected(false);
-        } catch (SQLException ex) {
-            Logger.getLogger(VistaDigo.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
     }//GEN-LAST:event_btnGuardarUsuarioActionPerformed
 
     private void boxVentasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boxVentasActionPerformed
@@ -2974,13 +3009,13 @@ public class VistaDigo extends javax.swing.JFrame implements Runnable{
     }//GEN-LAST:event_boxVentasActionPerformed
 
     private void btnEliminarUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarUsuarioActionPerformed
+        
         int fila=tablaUsuarios.getSelectedRow();
-       
             if(fila>=0){
             try {
                 int resp = JOptionPane.showConfirmDialog(null, "¿Está seguro de eliminar el usuario?");
                 if(resp==0){
-                JOptionPane.showMessageDialog(null, ConLog.EliminarUsuario(fila, tablaUsuarios));
+                JOptionPane.showMessageDialog(null, ConLog.EliminarUsuario(tablaUsuarios.getValueAt(fila, 1).toString()));
                 MostrarTablaUsuarios();
                 }
             } catch (SQLException ex) {
@@ -2995,7 +3030,7 @@ public class VistaDigo extends javax.swing.JFrame implements Runnable{
     }//GEN-LAST:event_btnEliminarUsuarioActionPerformed
 
     private void btnLogotipoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogotipoActionPerformed
-            paneConfiguracion.add("Cargar logotipo",panelLogotipo);
+        paneConfiguracion.add("Cargar logotipo",panelLogotipo);
         paneConfiguracion.remove(panelImpuestos);
         paneConfiguracion.remove(panelAdmiUsuarios);
     }//GEN-LAST:event_btnLogotipoActionPerformed
@@ -3046,14 +3081,17 @@ public class VistaDigo extends javax.swing.JFrame implements Runnable{
     }//GEN-LAST:event_btnLimpiarImagenActionPerformed
 
     private void btnCancelarUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarUsuarioActionPerformed
-            txtUsuarioNuevo.setText("");
-            txtContraseñaNueva.setText("");
-            txtNombreCompleto.setText("");
-            boxVentas.setSelected(false);
-            boxProductos.setSelected(false);
-            boxCompras.setSelected(false);
-            boxCorte.setSelected(false);
-            boxConfiguracion.setSelected(false);
+        BanderaUsuario=false;
+        BanderaModificarUsuario=false;
+        txtUsuarioNuevo.setEditable(true);
+        txtUsuarioNuevo.setText("");
+        txtContraseñaNueva.setText("");
+        txtNombreCompleto.setText("");
+        boxVentas.setSelected(false);
+        boxProductos.setSelected(false);
+        boxCompras.setSelected(false);
+        boxCorte.setSelected(false);
+        boxConfiguracion.setSelected(false);
     }//GEN-LAST:event_btnCancelarUsuarioActionPerformed
 
     private void btnPrecioDolarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPrecioDolarActionPerformed
@@ -3077,7 +3115,7 @@ public class VistaDigo extends javax.swing.JFrame implements Runnable{
         if (resp == JOptionPane.OK_OPTION) {
             try {
                 String password = new String(pf.getPassword());
-                ResultSet result = ConPri.CorteDia();
+                ResultSet result = ConPri.VerificarAdmin();
                 String pass="";
                 while(result.next())
                 {
@@ -3190,7 +3228,55 @@ public class VistaDigo extends javax.swing.JFrame implements Runnable{
         }catch(NumberFormatException ex){
         }
     }//GEN-LAST:event_txtMinimoInvFocusLost
-   
+
+    private void btnModificarUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarUsuarioActionPerformed
+        // TODO add your handling code here:
+        txtUsuarioNuevo.setEditable(false);
+        BanderaUsuario = true;
+        BanderaModificarUsuario = true;
+        int fila = tablaUsuarios.getSelectedRow();
+        if(fila >= 0){
+            try {
+                txtUsuarioNuevo.setText(tablaUsuarios.getValueAt(fila, 1).toString());
+                txtNombreCompleto.setText(tablaUsuarios.getValueAt(fila, 2).toString());
+                ResultSet result = ConPri.Permisos(txtUsuarioNuevo.getText());
+                while(result.next()){
+                    boxVentas.setSelected(result.getBoolean(1));
+                    boxProductos.setSelected(result.getBoolean(2));
+                    boxCompras.setSelected(result.getBoolean(3));
+                    boxCorte.setSelected(result.getBoolean(4));
+                    boxConfiguracion.setSelected(result.getBoolean(5));
+                }
+            } catch (SQLException ex) {
+            }
+        }
+        else
+            JOptionPane.showMessageDialog(null, "No se selecciono ningun usuario");
+    }//GEN-LAST:event_btnModificarUsuarioActionPerformed
+
+    private void boxCorteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boxCorteActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_boxCorteActionPerformed
+
+    private void txtUsuarioNuevoFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtUsuarioNuevoFocusLost
+            // TODO add your handling code here:
+            if(!BanderaUsuario)
+                try{
+                    ResultSet result = ConPri.BuscarUsuario(txtUsuarioNuevo.getText());
+                    String usuario = null;
+                    while(result.next()){
+                        usuario = result.getString(1);
+                    }
+                    if(usuario != null)
+                    {
+                        System.out.println(usuario);
+                        JOptionPane.showMessageDialog(null, "Ese nombre de usuario ya existe");
+                        txtUsuarioNuevo.setText("");
+                    }
+                }catch (SQLException ex) {
+                }
+    }//GEN-LAST:event_txtUsuarioNuevoFocusLost
+
     private void llenarCombo(){
        //Esta funcion sirve para llenar el componente de departamentos con los registros de la base de datos
         try{
@@ -3676,7 +3762,6 @@ public class VistaDigo extends javax.swing.JFrame implements Runnable{
     private javax.swing.JButton btnCorte;
     private javax.swing.JButton btnCorteCajero;
     private javax.swing.JButton btnCorteDia;
-    private javax.swing.JButton btnCrearUsuario;
     private javax.swing.JButton btnDia;
     private javax.swing.JButton btnDineroCaja;
     private javax.swing.JButton btnElimProducto;
@@ -3695,6 +3780,7 @@ public class VistaDigo extends javax.swing.JFrame implements Runnable{
     private javax.swing.JButton btnMas;
     private javax.swing.JButton btnMenos;
     private javax.swing.JButton btnModProducto;
+    private javax.swing.JButton btnModificarUsuario;
     private javax.swing.JButton btnNuevoDepartamento;
     private javax.swing.JButton btnPrecioDolar;
     private javax.swing.JButton btnProductos;

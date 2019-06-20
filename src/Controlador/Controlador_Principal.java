@@ -252,10 +252,30 @@ public class Controlador_Principal {
          */
         PreparedStatement pst;
         ResultSet rs;
-        String sql = "SELECT nombreUsuario AS 'Usuarios' FROM login";
+        String sql = "SELECT id_empleado AS 'Id empleado', usuario AS 'Usuarios', nombreUsuario AS 'Nombre completo' FROM login";
         pst = Coneccion().prepareStatement(sql);
         rs = pst.executeQuery();
         return DbUtils.resultSetToTableModel(rs);
+    }
+    public ResultSet BuscarUsuario(String Usuario) throws SQLException
+    {
+        PreparedStatement pst;
+        ResultSet rs;
+        String sql = "SELECT usuario FROM `login` WHERE `usuario`=?";
+        pst = Coneccion().prepareStatement(sql);
+        pst.setString(1, Usuario);
+        rs = pst.executeQuery();
+        return rs;
+    }
+    public ResultSet Verificar(String usuario, String pass) throws SQLException
+    {
+        PreparedStatement pst;
+        ResultSet rs;
+        String sql = "SELECT contraseña FROM `login` WHERE `usuario`=?";
+        pst = Coneccion().prepareStatement(sql);
+        pst.setString(1, usuario);
+        rs = pst.executeQuery();
+        return rs;
     }
     public ResultSet Permisos(String Usuario) throws SQLException{
         PreparedStatement pst;
@@ -312,7 +332,7 @@ public class Controlador_Principal {
         }
         return rs;
     }
-    public ResultSet CorteDia() throws SQLException
+    public ResultSet VerificarAdmin() throws SQLException
     {
         PreparedStatement pst=null;
         ResultSet rs;
