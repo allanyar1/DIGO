@@ -3,7 +3,6 @@ import com.mysql.jdbc.exceptions.MySQLIntegrityConstraintViolationException;
 import java.awt.HeadlessException;
 import java.awt.Image;
 import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
@@ -13,7 +12,6 @@ import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import static java.lang.System.exit;
 import java.math.RoundingMode;
 import java.sql.Blob;
 import java.sql.Connection;
@@ -23,7 +21,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
-import java.text.ParseException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ImageIcon;
@@ -34,10 +31,8 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Vector;
 import javax.imageio.ImageIO;
-import javax.swing.Icon;
 import javax.swing.JFileChooser;
 import javax.swing.JPasswordField;
-import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
 public class VistaDigo extends javax.swing.JFrame implements Runnable{
@@ -160,6 +155,7 @@ public class VistaDigo extends javax.swing.JFrame implements Runnable{
         // btnV.setEnabled(false);
     }*/
     
+    @Override
     public void run(){
         
         Thread current=Thread.currentThread();
@@ -2344,13 +2340,13 @@ public class VistaDigo extends javax.swing.JFrame implements Runnable{
         int habia=0;
         int cantidad=0;
         int existencia=habia+cantidad;
-        String hora="";
+        String horas="";
         String fecha="";
         Date date = new Date();
         DateFormat h = new SimpleDateFormat("HH:mm");     
         DateFormat f = new SimpleDateFormat("yyyy/MM/dd");       
         fecha=f.format(date);
-        hora=h.format(date);
+        horas=h.format(date);
         //Se manda a llamar la funcion que verifica si los espacios estan vacios
         validarReg();
         try {
@@ -2466,22 +2462,22 @@ public class VistaDigo extends javax.swing.JFrame implements Runnable{
         int cantidad=Integer.parseInt(txtNuevaCantidad.getText());
         if(cantidad>0){
         int existencia=habia+cantidad;
-        String hora="";
+        String horas="";
         String fecha="";
         Date date = new Date();
         DateFormat h = new SimpleDateFormat("HH:mm");     
         DateFormat f = new SimpleDateFormat("yyyy/MM/dd");       
         fecha=f.format(date);
-        hora=h.format(date);
-        float corte=Float.parseFloat(txtPrecioVentaInv.getText())*Float.parseFloat(txtNuevaCantidad.getText());
+        horas=h.format(date);
+        float cortet=Float.parseFloat(txtPrecioVentaInv.getText())*Float.parseFloat(txtNuevaCantidad.getText());
         String usuario=lbUsuario.getText();
         if("".equals(lblCodigoProducto.getText())){
         JOptionPane.showMessageDialog(null,"No ingresaste un Id o seleccionaste un inventario");
         }else{
             try {
                 //regMovimientoEntrada();
-                ConMov.registrarMovimientos(fecha,hora,descripcion,habia,tipo,cantidad,existencia);
-                ConCor.regCorte(usuario,fecha,hora,tipo,corte);
+                ConMov.registrarMovimientos(fecha,horas,descripcion,habia,tipo,cantidad,existencia);
+                ConCor.regCorte(usuario,fecha,horas,tipo,cortet);
                 //Este metodo sirve para hacer la modificacion de las compras
                 regInvTabla();
                 MostrarTablaMovimientos();
@@ -2676,13 +2672,13 @@ public class VistaDigo extends javax.swing.JFrame implements Runnable{
         String tipo="Entrada", respuesta;
         int cantidad=0;
         int existencia=0;
-        String hora="";
+        String horas="";
         String fecha2="";
         Date date = new Date();
         DateFormat h = new SimpleDateFormat("HH:mm");     
         DateFormat f = new SimpleDateFormat("yyyy/MM/dd");       
         fecha2=f.format(date);
-        hora=h.format(date);
+        horas=h.format(date);
         Float tot;
         respuesta=JOptionPane.showInputDialog(null, "Por favor, pague: "+lbCobroFinal.getText()+" pesos", "Cobro", JOptionPane.INFORMATION_MESSAGE);
         if(respuesta!=null)
@@ -2721,7 +2717,7 @@ public class VistaDigo extends javax.swing.JFrame implements Runnable{
                             cantidad=Integer.parseInt(tablaVentas.getValueAt(cont, 2)+"");
                             existencia=habia-cantidad;
                             corte=Float.parseFloat(lbCobroFinal.getText());
-                            ConMov.registrarMovimientos(fecha2,hora,descripcion,habia,tipo,cantidad,existencia);
+                            ConMov.registrarMovimientos(fecha2,horas,descripcion,habia,tipo,cantidad,existencia);
                            // ConCor.regCorte(usuario,fecha2,hora,tipo,corte);
                         }
                         else
@@ -2761,7 +2757,7 @@ public class VistaDigo extends javax.swing.JFrame implements Runnable{
                         "Codigo de producto", "Descripcion", "Cantidad", "Precio de Venta", "Existencia", "Subtotal"
                     }));
                     ii=0;
-                    ConCor.regCorte(usuario,fecha2,hora,tipo,corte);
+                    ConCor.regCorte(usuario,fecha2,horas,tipo,corte);
                     Cb_dolar.setSelected(false);
                     ban=false;
                     lbCobroFinal.setText("0.00");
@@ -2893,23 +2889,23 @@ public class VistaDigo extends javax.swing.JFrame implements Runnable{
         try{
         Runtime runtime = Runtime.getRuntime();
         File backupFile = new File(String.valueOf(RealizarBackupMySQL.getSelectedFile().toString())+".sql");
-        FileWriter fw = new FileWriter(backupFile);
-        Process child = runtime.exec("C:\\Bitnami\\wampstack-7.1.26-0\\mysql\\bin\\mysqldump --opt --password=password --user=root --databases DigoV");
-
-        InputStreamReader irs = new InputStreamReader(child.getInputStream());
-        BufferedReader br = new BufferedReader(irs);
-
-        String line;
-        while( (line=br.readLine()) != null ) {
-        fw.write(line + "\n");
-        }
-        fw.close();
+        InputStreamReader irs;
+        BufferedReader br;
+            try (FileWriter fw = new FileWriter(backupFile)) {
+                Process child = runtime.exec("C:\\Bitnami\\wampstack-7.1.26-0\\mysql\\bin\\mysqldump --opt --password=password --user=root --databases DigoV");
+                irs = new InputStreamReader(child.getInputStream());
+                br = new BufferedReader(irs);
+                String line;
+                while( (line=br.readLine()) != null ) {
+                    fw.write(line + "\n");
+                }   
+            }
         irs.close();
         br.close();
 
         JOptionPane.showMessageDialog(null, "Archivo generado correctamente.","Verificar",JOptionPane. INFORMATION_MESSAGE);
-        }catch(Exception e){
-        JOptionPane.showMessageDialog(null, "Error no se genero el archivo por el siguiente motivo:"+e.getMessage(), "Verificar",JOptionPane.ERROR_MESSAGE);
+        }catch(IOException ex){
+        JOptionPane.showMessageDialog(null, "Error no se genero el archivo por el siguiente motivo:"+ex.getMessage(), "Verificar",JOptionPane.ERROR_MESSAGE);
         }
         //JOptionPane.showMessageDialog(null, "Archivogenerado","Verificar",JOptionPane.INFORMAT ION_MESSAGE);
         } else if (resp==JFileChooser.CANCEL_OPTION) {
@@ -2940,7 +2936,7 @@ public class VistaDigo extends javax.swing.JFrame implements Runnable{
         boolean venta=boxVentas.isSelected();
         boolean productos=boxProductos.isSelected();
         boolean compras=boxCompras.isSelected();
-        boolean corte=boxCorte.isSelected();
+        boolean cortet=boxCorte.isSelected();
         boolean configuracion=boxConfiguracion.isSelected();
         
         if(txtUsuarioNuevo.getText().equals("")|| txtContraseñaNueva.getText().equals("") || txtNombreCompleto.getText().equals("")){
@@ -2948,7 +2944,7 @@ public class VistaDigo extends javax.swing.JFrame implements Runnable{
         }
         else{
         try {
-            JOptionPane.showMessageDialog(null,ConLog.RegistrarUsuario(usuario, contra, nombreUsuario, venta, productos, compras, corte, configuracion));
+            JOptionPane.showMessageDialog(null,ConLog.RegistrarUsuario(usuario, contra, nombreUsuario, venta, productos, compras, cortet, configuracion));
             MostrarTablaUsuarios();
             txtUsuarioNuevo.setText("");
             txtContraseñaNueva.setText("");
@@ -3007,7 +3003,7 @@ public class VistaDigo extends javax.swing.JFrame implements Runnable{
                 longitudBytes=(int)j.getSelectedFile().length();
                 try {
                     Image icono=ImageIO.read(j.getSelectedFile()).getScaledInstance
-                            (fotoT.getWidth(),fotoT.getHeight(),Image.SCALE_DEFAULT);
+                    (fotoT.getWidth(),fotoT.getHeight(),Image.SCALE_DEFAULT);
                     fotoT.setIcon(new ImageIcon(icono));
                     fotoT.updateUI();
 
@@ -3015,10 +3011,8 @@ public class VistaDigo extends javax.swing.JFrame implements Runnable{
                     JOptionPane.showMessageDialog(null, "imagen: "+ex);
                 }
             }catch(FileNotFoundException ex){
-                ex.printStackTrace();
             }
         }  
-        
     }//GEN-LAST:event_btnCargarImagen2ActionPerformed
 
     private void btnGuardarImagenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarImagenActionPerformed
@@ -3074,11 +3068,11 @@ public class VistaDigo extends javax.swing.JFrame implements Runnable{
         if (resp == JOptionPane.OK_OPTION) {
             try {
                 String password = new String(pf.getPassword());
-                ResultSet rs = ConPri.CorteDia();
+                ResultSet result = ConPri.CorteDia();
                 String pass="";
-                while(rs.next())
+                while(result.next())
                 {
-                    pass=rs.getString(1);
+                    pass=result.getString(1);
                 }
                 if(password.equals(pass)){
                  paneCorte.remove(panelCajero);
@@ -3188,15 +3182,15 @@ public class VistaDigo extends javax.swing.JFrame implements Runnable{
         }
     }//GEN-LAST:event_txtMinimoInvFocusLost
    
-    public void llenarCombo(){
+    private void llenarCombo(){
        //Esta funcion sirve para llenar el componente de departamentos con los registros de la base de datos
         try{
             boxDepartamento.removeAllItems();
           
-            ResultSet rs=ConDep.Llenar();
-            while(rs.next())
+            ResultSet result=ConDep.Llenar();
+            while(result.next())
             {
-                boxDepartamento.addItem(rs.getString(2));
+                boxDepartamento.addItem(result.getString(2));
               
             }
         } catch (ClassNotFoundException | SQLException ex) {
@@ -3208,47 +3202,47 @@ public class VistaDigo extends javax.swing.JFrame implements Runnable{
         JOptionPane.showMessageDialog(null, ConDep.RegistrarDepartamento(Ultimo, txtNuevoDepartamento.getText()));
         MostrarTablaDepartamentos();
     }
-    public void MostrarTablaProductos() throws SQLException{
+    private void MostrarTablaProductos() throws SQLException{
         //Esta funcion sirve para traer los datos de la base de datos a la tabla
         tablaProductos.setModel(ConPri.MostrarTablaProductos());
     }
-    public void MostrarTablaProductos2() throws SQLException{
+    private void MostrarTablaProductos2() throws SQLException{
         //Esta funcion sirve para traer los datos de la base de datos a la tabla
         tablaReporteProductos.setModel(ConPri.MostrarTabla2(txtBuscarArt));
     }
-    public void MostrarTablaReporteInv() throws SQLException{
+    private void MostrarTablaReporteInv() throws SQLException{
         //Esta funcion sirve para traer los datos de la base de datos a la tabla
         tablaReporteInv.setModel(ConPri.MostrarTablaReporteInv());
     }
-    public void MostrarTablaInvBajo() throws SQLException{
+    private void MostrarTablaInvBajo() throws SQLException{
         //Esta funcion sirve para traer los datos de la base de datos a la tabla
         tablaInvBajo.setModel(ConPri.MostrarTablaInvBajo());
     }
-    public void MostrarTablaDepartamentos() throws SQLException{
+    private void MostrarTablaDepartamentos() throws SQLException{
         //Esta funcion sirve para traer los datos de la base de datos a la tabla
         tablaDepartamentos.setModel(ConPri.MostrarTablaDepartamentos());
     }
-    public void MostrarTablaMovimientos() throws SQLException{
+    private void MostrarTablaMovimientos() throws SQLException{
         //Esta funcion sirve para traer los datos de la base de datos a la tabla
         tablaMovientos.setModel(ConPri.MostrarTablaMov());
     }
-    public void MostrarSalida() throws SQLException{
+    private void MostrarSalida() throws SQLException{
         //Esta funcion sirve para traer los datos de la base de datos a la tabla
         tablaEntradas.setModel(ConPri.MostrarSalida());
     }
-    public void MostrarEntrada() throws SQLException{
+    private void MostrarEntrada() throws SQLException{
         //Esta funcion sirve para traer los datos de la base de datos a la tabla
         tablaSalidas.setModel(ConPri.MostrarEntrada());
     }
-    public void MostrarCorteTemporal() throws SQLException{
+    private void MostrarCorteTemporal() throws SQLException{
         //Esta funcion sirve para traer los datos de la base de datos a la tabla
         tablaCorteTemporal.setModel(ConPri.MostrarTemporal());
     }
-    public void MostrarTablaUsuarios() throws SQLException{
+    private void MostrarTablaUsuarios() throws SQLException{
         //Esta funcion sirve para traer los datos de la base de datos a la tabla
         tablaUsuarios.setModel(ConPri.MostrarTablaUsuarios());
     }
-    public void MostrarTablaVentas(int Id) throws SQLException{
+    private void MostrarTablaVentas(int Id) throws SQLException{
         //Esta funcion sirve para traer los datos de la base de datos a la tabla
         DefaultTableModel modeloinsert = (DefaultTableModel) tablaVentas.getModel();
         Vector <String> Fila=ConPri.MostrarTablaVentas(Id);
@@ -3267,7 +3261,7 @@ public class VistaDigo extends javax.swing.JFrame implements Runnable{
         if(ii<18)
             modeloinsert.removeRow(17);
     }
-    public void limpiarReg(){
+    private void limpiarReg(){
         //Se limpia los espacios de el registro de productos
             txtId.setText("");
             txtDescripcion.setText("");
@@ -3281,13 +3275,13 @@ public class VistaDigo extends javax.swing.JFrame implements Runnable{
             panelInventarioReg.setVisible(false);
     }
     
-    public void validarReg(){
+    private void validarReg(){
         //Valida que los datos del registro de productos no esten vacios
         if(boxInventario.isSelected()){
             if(txtId.getText().equals("") || txtDescripcion.getText().equals("")||txtPrecioCosto.getText().equals("")|| txtPrecioVenta.getText().equals("")|| txtHay.getText().equals("")|| txtMinimo.getText().equals("")){
-            JOptionPane.showMessageDialog(null,"Debe de capturar los datos");
-            lbVerificacion.setVisible(false);
-        }
+                JOptionPane.showMessageDialog(null,"Debe de capturar los datos");
+                lbVerificacion.setVisible(false);
+            }
         }else{
             if(txtId.getText().equals("") || txtDescripcion.getText().equals("")||txtPrecioCosto.getText().equals("")|| txtPrecioVenta.getText().equals(""))
             JOptionPane.showMessageDialog(null,"Debe de capturar los datos");
@@ -3308,9 +3302,9 @@ public class VistaDigo extends javax.swing.JFrame implements Runnable{
     public void regInvTabla() throws SQLException{
         //En esta funcion sirve para registrar una venta de productos
         int id=Integer.parseInt(lblCodigoProducto.getText());
-        int Total=(Integer.parseInt(txtExistenciaInv.getText()))+(Integer.parseInt(txtNuevaCantidad.getText()));
+        int Totallizacion=(Integer.parseInt(txtExistenciaInv.getText()))+(Integer.parseInt(txtNuevaCantidad.getText()));
         int minimo=Integer.parseInt(txtMinimoInv.getText());
-        JOptionPane.showMessageDialog(null, ConInv.ModificarInventario(id,Total, minimo));
+        JOptionPane.showMessageDialog(null, ConInv.ModificarInventario(id,Totallizacion, minimo));
         MostrarTablaReporteInv();
         MostrarTablaInvBajo();
         lblCodigoProducto.setText("");
@@ -3344,10 +3338,10 @@ public class VistaDigo extends javax.swing.JFrame implements Runnable{
         int fila=tablaVentas.getSelectedRow();
         String resultado="";
         Date date = new Date();
-        DateFormat hora = new SimpleDateFormat("HH:mm");     
+        DateFormat horas = new SimpleDateFormat("HH:mm");     
         DateFormat fecha = new SimpleDateFormat("yyyy/MM/dd");       
         String f=fecha.format(date);
-        String h=hora.format(date);
+        String h=horas.format(date);
         try{
             String sql="INSERT INTO `movimientos`(`fecha`, `hora`, `descripcion`, `habia`, `tipo`, `cantidad`, `existencia`) VALUES(?,?,?,?,?,?,?)";
             con =DriverManager.getConnection("jdbc:mysql://localhost/DigoV?SSL=FALSE","root","password");
@@ -3378,19 +3372,15 @@ public class VistaDigo extends javax.swing.JFrame implements Runnable{
            JOptionPane.showMessageDialog(null,""+e);
 
         }
-         catch(Exception e){
-           JOptionPane.showMessageDialog(null,""+e);
-
-        }
     }
     public void regMovimientoSalida(){
         int fila=tablaVentas.getSelectedRow();
         String resultado="";
         Date date = new Date();
-        DateFormat hora = new SimpleDateFormat("HH:mm");     
+        DateFormat horas = new SimpleDateFormat("HH:mm");     
         DateFormat fecha = new SimpleDateFormat("yyyy/MM/dd");       
         String f=fecha.format(date);
-        String h=hora.format(date);
+        String h=horas.format(date);
         try{
             String sql="INSERT INTO `movimientos`(`fecha`, `hora`, `descripcion`, `habia`, `tipo`, `cantidad`, `existencia`) VALUES (?,?,?,?,?,?,?)";
             con2 =DriverManager.getConnection("jdbc:mysql://localhost/DigoV?SSL=FALSE","root","password");
@@ -3421,33 +3411,29 @@ public class VistaDigo extends javax.swing.JFrame implements Runnable{
            JOptionPane.showMessageDialog(null,""+e);
 
         }
-         catch(Exception e){
-           JOptionPane.showMessageDialog(null,""+e);
-
-        }
     }
     public void Permisos() throws SQLException
     {
-        ResultSet rs = ConPri.Permisos(lbUsuario.getText());
-        while(rs.next()){
-            btnVenta.setEnabled(rs.getBoolean(1));
-            btnProductos.setEnabled(rs.getBoolean(2));
-            btnInventario.setEnabled(rs.getBoolean(3));
+        ResultSet result= ConPri.Permisos(lbUsuario.getText());
+        while(result.next()){
+            btnVenta.setEnabled(result.getBoolean(1));
+            btnProductos.setEnabled(result.getBoolean(2));
+            btnInventario.setEnabled(result.getBoolean(3));
             btnCorte.setEnabled(true);
             //btnCorteDia.setEnabled(rs.getBoolean(4));
-            btnConfiguracion.setEnabled(rs.getBoolean(5));
+            btnConfiguracion.setEnabled(result.getBoolean(5));
         }
     }
-    public void cargar() throws IOException{
+    private void cargar() throws IOException{
         BufferedImage img=null;
-        ResultSet rs=ConPri.visualizarLogo();
+        ResultSet result=ConPri.visualizarLogo();
         try {
-            if(rs.next()){
-                Blob blob= rs.getBlob(2);
+            if(result.next()){
+                Blob blob= result.getBlob(2);
                 byte[] data=blob.getBytes(1,(int)blob.length());
                 try{
                     img=ImageIO.read(new ByteArrayInputStream(data));
-                }catch(Exception ex){
+                }catch(IOException ex){
                 }
                 
             }  
@@ -3457,7 +3443,7 @@ public class VistaDigo extends javax.swing.JFrame implements Runnable{
         ImageIcon icono=new ImageIcon(img);
         lbFoto.setIcon(icono);
     }
-    public void calcular_corte(){
+    private void calcular_corte(){
         float acum=0;
         float acum2=0;
         float t,e,s,c;
@@ -3479,7 +3465,7 @@ public class VistaDigo extends javax.swing.JFrame implements Runnable{
         lbTotalCorte.setText((c+e-s)+"");
         
     }
-    public void calcular_corte_final(){
+    private void calcular_corte_final(){
         float acum=0;
         float acum2=0;
         float acum3=0;
@@ -3543,7 +3529,7 @@ public class VistaDigo extends javax.swing.JFrame implements Runnable{
         else
             return false;
     }
-    public void DineroDolar()
+    private void DineroDolar()
     {
         try{
             dolarString = JOptionPane.showInputDialog("¿Cual es el valor del dolar?", "");
@@ -3556,7 +3542,7 @@ public class VistaDigo extends javax.swing.JFrame implements Runnable{
             DineroDolar();
         }
     }
-    public void DineroCaja()
+    private void DineroCaja()
     {
         try{
             cajaString = JOptionPane.showInputDialog("¿Cuanto dinero hay en caja?", "");
@@ -3582,15 +3568,42 @@ public class VistaDigo extends javax.swing.JFrame implements Runnable{
                     break;
                 }
             }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(VistaDigo.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(VistaDigo.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(VistaDigo.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(VistaDigo.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        
         //</editor-fold>
         //</editor-fold>
         //</editor-fold>
@@ -3625,14 +3638,11 @@ public class VistaDigo extends javax.swing.JFrame implements Runnable{
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                try {
-                    new VistaDigo().setVisible(true);
-                } catch (SQLException ex) {
-                    Logger.getLogger(VistaDigo.class.getName()).log(Level.SEVERE, null, ex);
-                }
-                
+        java.awt.EventQueue.invokeLater(() -> {
+            try {
+                new VistaDigo().setVisible(true);
+            } catch (SQLException ex) {
+                Logger.getLogger(VistaDigo.class.getName()).log(Level.SEVERE, null, ex);
             }
         });
     }
