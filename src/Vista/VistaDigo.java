@@ -3606,35 +3606,35 @@ public class VistaDigo extends javax.swing.JFrame implements Runnable{
                 }
                 archivoXLS.createNewFile();
                 Workbook libro = new HSSFWorkbook();
-                FileOutputStream archivo = new FileOutputStream(archivoXLS);
-                Sheet hoja = libro.createSheet("Mi hoja de trabajo 1");
-                hoja.setDisplayGridlines(false);
-                for (int f = 0; f < t.getRowCount(); f++) {
-                    Row fila = hoja.createRow(f);
-                    for (int c = 0; c < t.getColumnCount(); c++) {
-                        Cell celda = fila.createCell(c);
-                        if (f == 0) {
-                            celda.setCellValue(t.getColumnName(c));
+                try (FileOutputStream archivo = new FileOutputStream(archivoXLS)) {
+                    Sheet hoja = libro.createSheet("Mi hoja de trabajo 1");
+                    hoja.setDisplayGridlines(false);
+                    for (int f = 0; f < t.getRowCount(); f++) {
+                        Row fila = hoja.createRow(f);
+                        for (int c = 0; c < t.getColumnCount(); c++) {
+                            Cell celda = fila.createCell(c);
+                            if (f == 0) {
+                                celda.setCellValue(t.getColumnName(c));
+                            }
                         }
                     }
-                }
-                int filaInicio = 1;
-                for (int f = 0; f < t.getRowCount(); f++) {
-                    Row fila = hoja.createRow(filaInicio);
-                    filaInicio++;
-                    for (int c = 0; c < t.getColumnCount(); c++) {
-                        Cell celda = fila.createCell(c);
-                        if (t.getValueAt(f, c) instanceof Double) {
-                            celda.setCellValue(Double.parseDouble(t.getValueAt(f, c).toString()));
-                        } else if (t.getValueAt(f, c) instanceof Float) {
-                            celda.setCellValue(Float.parseFloat((String) t.getValueAt(f, c)));
-                        } else {
-                            celda.setCellValue(String.valueOf(t.getValueAt(f, c)));
+                    int filaInicio = 1;
+                    for (int f = 0; f < t.getRowCount(); f++) {
+                        Row fila = hoja.createRow(filaInicio);
+                        filaInicio++;
+                        for (int c = 0; c < t.getColumnCount(); c++) {
+                            Cell celda = fila.createCell(c);
+                            if (t.getValueAt(f, c) instanceof Double) {
+                                celda.setCellValue(Double.parseDouble(t.getValueAt(f, c).toString()));
+                            } else if (t.getValueAt(f, c) instanceof Float) {
+                                celda.setCellValue(Float.parseFloat((String) t.getValueAt(f, c)));
+                            } else {
+                                celda.setCellValue(String.valueOf(t.getValueAt(f, c)));
+                            }
                         }
                     }
+                    libro.write(archivo);
                 }
-                libro.write(archivo);
-                archivo.close();
                 Desktop.getDesktop().open(archivoXLS);
             } catch (IOException | NumberFormatException e) {
             }
