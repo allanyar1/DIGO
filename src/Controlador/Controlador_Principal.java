@@ -341,6 +341,21 @@ public class Controlador_Principal {
         rs = pst.executeQuery();
         return rs;
     }
-   
+    public TableModel MostrarTablaExportar() throws SQLException {
+        /**
+         * *
+         *
+         * Esta función se utiliza para establecer una conexion entre la base de
+         * datos y la tabla de productos y traer los datos para hacerlos
+         * visibles en el sistema
+         *
+         */
+        PreparedStatement pst;
+        ResultSet rs;
+        String sql = "SELECT * FROM `corte_totales`";
+        pst = Coneccion().prepareStatement(sql);
+        rs = pst.executeQuery();
+        return DbUtils.resultSetToTableModel(rs);
+    }
 }
 

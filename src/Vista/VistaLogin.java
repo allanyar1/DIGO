@@ -73,6 +73,9 @@ public class VistaLogin extends javax.swing.JFrame {
         jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/login.png"))); // NOI18N
 
         txtContra.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtContraKeyPressed(evt);
+            }
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 txtContraKeyTyped(evt);
             }
@@ -125,6 +128,30 @@ public class VistaLogin extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAceptarActionPerformed
+        Iniciar();
+    }//GEN-LAST:event_btnAceptarActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+             // TODO add your handling code here:
+             exit(0);
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void txtContraKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtContraKeyTyped
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtContraKeyTyped
+
+    private void txtContraKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtContraKeyPressed
+        // TODO add your handling code here:
+        if(evt.getKeyCode() == KeyEvent.VK_ENTER)
+        {
+            Iniciar();
+        }
+    }//GEN-LAST:event_txtContraKeyPressed
+
+    /**
+     * @param args the command line arguments
+     */
+    public void Iniciar(){
         try {
             String pass=new String(txtContra.getPassword());
             //ConLog.Login(txtUsuario.getText(),pass);
@@ -148,27 +175,12 @@ public class VistaLogin extends javax.swing.JFrame {
                 case -1:
                     JOptionPane.showMessageDialog(null, "Usuario y/o contraseña incorrectos");
                     txtUsuario.setText("");
-                    txtContra.setText("");
-                
-            }
-          
+                    txtContra.setText("");   
+            }          
         } catch (SQLException ex) {
             Logger.getLogger(VistaLogin.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }//GEN-LAST:event_btnAceptarActionPerformed
-
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-             // TODO add your handling code here:
-             exit(0);
-    }//GEN-LAST:event_jButton2ActionPerformed
-
-    private void txtContraKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtContraKeyTyped
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtContraKeyTyped
-
-    /**
-     * @param args the command line arguments
-     */
+    }
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">

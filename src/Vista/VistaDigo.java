@@ -6,11 +6,9 @@ import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.math.RoundingMode;
 import java.sql.Blob;
@@ -31,9 +29,20 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Vector;
 import javax.imageio.ImageIO;
-import javax.swing.JFileChooser;
 import javax.swing.JPasswordField;
 import javax.swing.table.DefaultTableModel;
+import java.awt.Desktop;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import javax.swing.JFileChooser;
+import javax.swing.JTable;
+import javax.swing.filechooser.FileNameExtensionFilter;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
 
 public class VistaDigo extends javax.swing.JFrame implements Runnable{
     
@@ -115,7 +124,7 @@ public class VistaDigo extends javax.swing.JFrame implements Runnable{
         MostrarCorteTemporal();
         llenarCombo();
         calcular_corte();
-        calcular_corte_final();
+        CarcularCorteFinal();
         //Permisos();
         lbVerificacion.setVisible(false);
         btnSalir.setMnemonic(KeyEvent.VK_END);
@@ -268,8 +277,6 @@ public class VistaDigo extends javax.swing.JFrame implements Runnable{
         btnModificarUsuario = new javax.swing.JButton();
         jScrollPane8 = new javax.swing.JScrollPane();
         tablaUsuarios = new javax.swing.JTable();
-        panelImpuestos = new javax.swing.JPanel();
-        jButton3 = new javax.swing.JButton();
         panelLogotipo = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
         btnLimpiarImagen = new javax.swing.JButton();
@@ -1232,27 +1239,6 @@ public class VistaDigo extends javax.swing.JFrame implements Runnable{
 
         paneConfiguracion.addTab("Administrar Usuarios", panelAdmiUsuarios);
 
-        jButton3.setText("jButton3");
-
-        javax.swing.GroupLayout panelImpuestosLayout = new javax.swing.GroupLayout(panelImpuestos);
-        panelImpuestos.setLayout(panelImpuestosLayout);
-        panelImpuestosLayout.setHorizontalGroup(
-            panelImpuestosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelImpuestosLayout.createSequentialGroup()
-                .addGap(139, 139, 139)
-                .addComponent(jButton3)
-                .addContainerGap(1101, Short.MAX_VALUE))
-        );
-        panelImpuestosLayout.setVerticalGroup(
-            panelImpuestosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelImpuestosLayout.createSequentialGroup()
-                .addGap(101, 101, 101)
-                .addComponent(jButton3)
-                .addContainerGap(334, Short.MAX_VALUE))
-        );
-
-        paneConfiguracion.addTab("Administrar Impuestos", panelImpuestos);
-
         jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder("Subir Logotipo de la Empresa"));
 
         btnLimpiarImagen.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/iconoNuevoUsuario.png"))); // NOI18N
@@ -1466,7 +1452,7 @@ public class VistaDigo extends javax.swing.JFrame implements Runnable{
         jLabel22.setText("$");
 
         lbE1.setFont(new java.awt.Font("Dialog", 1, 20)); // NOI18N
-        lbE1.setForeground(new java.awt.Color(102, 255, 0));
+        lbE1.setForeground(new java.awt.Color(0, 153, 0));
         lbE1.setText("0.00");
 
         lbS1.setFont(new java.awt.Font("Dialog", 1, 20)); // NOI18N
@@ -1490,8 +1476,8 @@ public class VistaDigo extends javax.swing.JFrame implements Runnable{
             }
         });
 
-        btnReporte.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/emailicono.png"))); // NOI18N
-        btnReporte.setText("Enviar reporte");
+        btnReporte.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/excelicono.jpg"))); // NOI18N
+        btnReporte.setText("Exportar a Excel");
         btnReporte.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnReporteActionPerformed(evt);
@@ -1668,7 +1654,7 @@ public class VistaDigo extends javax.swing.JFrame implements Runnable{
         lbCaja.setText("0.00");
 
         lbE.setFont(new java.awt.Font("Dialog", 1, 20)); // NOI18N
-        lbE.setForeground(new java.awt.Color(102, 255, 0));
+        lbE.setForeground(new java.awt.Color(0, 153, 0));
         lbE.setText("0.00");
 
         lbS.setFont(new java.awt.Font("Dialog", 1, 20)); // NOI18N
@@ -2250,7 +2236,7 @@ public class VistaDigo extends javax.swing.JFrame implements Runnable{
         panePrincipal.remove(panelDepartamentos);
         panePrincipal.remove(panelCatalogoPro);
         panePrincipal.remove(panelConfiguracion);
-        
+        panePrincipal.remove(panelCorte);
     }//GEN-LAST:event_btnVentaActionPerformed
 
     private void btnSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalirActionPerformed
@@ -2478,33 +2464,33 @@ public class VistaDigo extends javax.swing.JFrame implements Runnable{
         int habia=Integer.parseInt(txtExistenciaInv.getText());
         int cantidad=Integer.parseInt(txtNuevaCantidad.getText());
         if(cantidad>0){
-        int existencia=habia+cantidad;
-        String horas="";
-        String fecha="";
-        Date date = new Date();
-        DateFormat h = new SimpleDateFormat("HH:mm");     
-        DateFormat f = new SimpleDateFormat("yyyy/MM/dd");       
-        fecha=f.format(date);
-        horas=h.format(date);
-        float cortet=Float.parseFloat(txtPrecioVentaInv.getText())*Float.parseFloat(txtNuevaCantidad.getText());
-        String usuario=lbUsuario.getText();
-        if("".equals(lblCodigoProducto.getText())){
-        JOptionPane.showMessageDialog(null,"No ingresaste un Id o seleccionaste un inventario");
-        }else{
-            try {
-                //regMovimientoEntrada();
-                ConMov.registrarMovimientos(fecha,horas,descripcion,habia,tipo,cantidad,existencia);
-                ConCor.regCorte(usuario,fecha,horas,tipo,cortet);
-                //Este metodo sirve para hacer la modificacion de las compras
-                regInvTabla();
-                MostrarTablaMovimientos();
-                MostrarSalida();
-                MostrarEntrada();
-                calcular_corte();
-            } catch (SQLException ex) {
-                Logger.getLogger(VistaDigo.class.getName()).log(Level.SEVERE, null, ex);
+            int existencia=habia+cantidad;
+            String horas="";
+            String fecha="";
+            Date date = new Date();
+            DateFormat h = new SimpleDateFormat("HH:mm");     
+            DateFormat f = new SimpleDateFormat("yyyy/MM/dd");       
+            fecha=f.format(date);
+            horas=h.format(date);
+            float cortet=Float.parseFloat(txtPrecioCostoInv.getText())*Float.parseFloat(txtNuevaCantidad.getText());
+            String usuario=lbUsuario.getText();
+            if("".equals(lblCodigoProducto.getText())){
+                JOptionPane.showMessageDialog(null,"No ingresaste un Id o seleccionaste un inventario");
+            }else{
+                try {
+                    //regMovimientoEntrada();
+                    ConMov.registrarMovimientos(fecha,horas,descripcion,habia,tipo,cantidad,existencia);
+                    ConCor.regCorte(usuario,fecha,horas,tipo,cortet);
+                    //Este metodo sirve para hacer la modificacion de las compras
+                    regInvTabla();
+                    MostrarTablaMovimientos();
+                    MostrarSalida();
+                    MostrarEntrada();
+                    calcular_corte();
+                } catch (SQLException ex) {
+                    Logger.getLogger(VistaDigo.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
-     } 
         }else{
           JOptionPane.showMessageDialog(null,"No se permite compras menores a un elemento");
           txtNuevaCantidad.setText("");
@@ -2739,7 +2725,7 @@ public class VistaDigo extends javax.swing.JFrame implements Runnable{
                             habia=Integer.parseInt(tablaVentas.getValueAt(cont, 4)+"");
                             cantidad=Integer.parseInt(tablaVentas.getValueAt(cont, 2)+"");
                             existencia=habia-cantidad;
-                            corte=Float.parseFloat(lbCobroFinal.getText());
+                            corte=tot;
                             ConMov.registrarMovimientos(fecha2,horas,descripcion,habia,tipo,cantidad,existencia);
                            // ConCor.regCorte(usuario,fecha2,hora,tipo,corte);
                         }
@@ -3024,9 +3010,6 @@ public class VistaDigo extends javax.swing.JFrame implements Runnable{
             }else{
             JOptionPane.showMessageDialog(null,"No selecciono ninguna fila");
         }
-            
-       
-        
     }//GEN-LAST:event_btnEliminarUsuarioActionPerformed
 
     private void btnLogotipoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogotipoActionPerformed
@@ -3127,12 +3110,10 @@ public class VistaDigo extends javax.swing.JFrame implements Runnable{
                 }  
                 else{
                   JOptionPane.showMessageDialog(null,"Contraseña incorrecta");
-                }
-                   
+                }      
             } catch (SQLException ex) {
             }
         }
-       
     }//GEN-LAST:event_btnCorteDiaActionPerformed
 
     private void btnTurnoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTurnoActionPerformed
@@ -3161,10 +3142,37 @@ public class VistaDigo extends javax.swing.JFrame implements Runnable{
 
     private void btnDiaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDiaActionPerformed
         // TODO add your handling code here:
+        String horas="";
+        String fecha="";
+        Date date = new Date();
+        DateFormat h = new SimpleDateFormat("HH:mm");     
+        DateFormat f = new SimpleDateFormat("yyyy/MM/dd");       
+        fecha=f.format(date);
+        horas=h.format(date);
+        String tipo;
+        float total=Float.parseFloat(lbTotalCorte1.getText());
+        if(total>0){
+            tipo="Ganancia";
+        }else{
+            tipo="Perdida";
+        }
+         JOptionPane.showMessageDialog(null, ConCor.corte_final(lbUsuario.getText(), fecha, horas, tipo, total));
+         ConCor.CorteTemporalBorrar();
+        try {
+            MostrarCorteTemporal();
+            CarcularCorteFinal();
+        } catch (SQLException ex) {
+            Logger.getLogger(VistaDigo.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_btnDiaActionPerformed
 
     private void btnReporteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReporteActionPerformed
-        // TODO add your handling code here:
+            // TODO add your handling code here:
+        try {
+            VistaCorte Corte =new VistaCorte();
+            Corte.setVisible(true);
+        } catch (SQLException ex) {
+        }
     }//GEN-LAST:event_btnReporteActionPerformed
 
     private void Cb_dolarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Cb_dolarActionPerformed
@@ -3561,7 +3569,7 @@ public class VistaDigo extends javax.swing.JFrame implements Runnable{
         lbTotalCorte.setText((c+e-s)+"");
         
     }
-    private void calcular_corte_final(){
+    private void CarcularCorteFinal(){
         float acum=0;
         float acum2=0;
         float acum3=0;
@@ -3586,6 +3594,55 @@ public class VistaDigo extends javax.swing.JFrame implements Runnable{
         s=Float.parseFloat(lbS1.getText());
         c=Float.parseFloat(lbCaja.getText());
         lbTotalCorte1.setText((c+e-s)+"");
+    }
+    public void ExportarExcel(JTable t) throws IOException{
+        JFileChooser chooser = new JFileChooser();
+        FileNameExtensionFilter filter = new FileNameExtensionFilter("Archivos de excel", "xls");
+        chooser.setFileFilter(filter);
+        chooser.setDialogTitle("Guardar archivo");
+        chooser.setAcceptAllFileFilterUsed(false);
+        if (chooser.showSaveDialog(null) == JFileChooser.APPROVE_OPTION) {
+            String ruta = chooser.getSelectedFile().toString().concat(".xls");
+            try {
+                File archivoXLS = new File(ruta);
+                if (archivoXLS.exists()) {
+                    archivoXLS.delete();
+                }
+                archivoXLS.createNewFile();
+                Workbook libro = new HSSFWorkbook();
+                FileOutputStream archivo = new FileOutputStream(archivoXLS);
+                Sheet hoja = libro.createSheet("Mi hoja de trabajo 1");
+                hoja.setDisplayGridlines(false);
+                for (int f = 0; f < t.getRowCount(); f++) {
+                    Row fila = hoja.createRow(f);
+                    for (int c = 0; c < t.getColumnCount(); c++) {
+                        Cell celda = fila.createCell(c);
+                        if (f == 0) {
+                            celda.setCellValue(t.getColumnName(c));
+                        }
+                    }
+                }
+                int filaInicio = 1;
+                for (int f = 0; f < t.getRowCount(); f++) {
+                    Row fila = hoja.createRow(filaInicio);
+                    filaInicio++;
+                    for (int c = 0; c < t.getColumnCount(); c++) {
+                        Cell celda = fila.createCell(c);
+                        if (t.getValueAt(f, c) instanceof Double) {
+                            celda.setCellValue(Double.parseDouble(t.getValueAt(f, c).toString()));
+                        } else if (t.getValueAt(f, c) instanceof Float) {
+                            celda.setCellValue(Float.parseFloat((String) t.getValueAt(f, c)));
+                        } else {
+                            celda.setCellValue(String.valueOf(t.getValueAt(f, c)));
+                        }
+                    }
+                }
+                libro.write(archivo);
+                archivo.close();
+                Desktop.getDesktop().open(archivoXLS);
+            } catch (IOException | NumberFormatException e) {
+            }
+        }
     }
     public boolean ValidarPositivos(int num)
     {
@@ -3628,7 +3685,7 @@ public class VistaDigo extends javax.swing.JFrame implements Runnable{
     private void DineroDolar()
     {
         try{
-            dolarString = JOptionPane.showInputDialog("¿Cual es el valor del dolar?", "");
+            dolarString = JOptionPane.showInputDialog(null, "¿Cual es el valor del dolar?", "Tipo de cambio", JOptionPane.PLAIN_MESSAGE);
             if(!ValidarPositivos(Double.parseDouble(dolarString)))
                 dolar=Double.parseDouble(dolarString);
             else
@@ -3641,7 +3698,7 @@ public class VistaDigo extends javax.swing.JFrame implements Runnable{
     private void DineroCaja()
     {
         try{
-            cajaString = JOptionPane.showInputDialog("¿Cuanto dinero hay en caja?", "");
+            cajaString = JOptionPane.showInputDialog(null, "¿Cuanto dinero hay en caja?", "Fondo de caja", JOptionPane.PLAIN_MESSAGE);
             if(!ValidarPositivos(Double.parseDouble(cajaString)))
                 caja=Double.parseDouble(cajaString);
             else
@@ -3793,7 +3850,6 @@ public class VistaDigo extends javax.swing.JFrame implements Runnable{
     private javax.swing.JButton btnVenta;
     private javax.swing.JLabel fotoT;
     private javax.swing.ButtonGroup grupo;
-    private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -3888,7 +3944,6 @@ public class VistaDigo extends javax.swing.JFrame implements Runnable{
     private javax.swing.JPanel panelCorte;
     private javax.swing.JPanel panelDepartamentos;
     private javax.swing.JPanel panelDia;
-    private javax.swing.JPanel panelImpuestos;
     private javax.swing.JPanel panelInvBajo;
     private javax.swing.JPanel panelInventario;
     private javax.swing.JPanel panelInventarioReg;
