@@ -106,7 +106,6 @@ public class VistaDigo extends javax.swing.JFrame implements Runnable{
         panePrincipal.remove(panelMov);
         panePrincipal.remove(panelCorte);
         panePrincipal.remove(panelConfiguracion);
-        paneConfiguracion.remove(panelImpuestos);
         paneConfiguracion.remove(panelAdmiUsuarios);
         paneConfiguracion.remove(panelLogotipo);
         paneCorte.remove(panelDia);
@@ -2926,13 +2925,11 @@ public class VistaDigo extends javax.swing.JFrame implements Runnable{
 
     private void btnConfiUsuariosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConfiUsuariosActionPerformed
         paneConfiguracion.add("Administrar Usuarios",panelAdmiUsuarios);
-        paneConfiguracion.remove(panelImpuestos);
         paneConfiguracion.remove(panelLogotipo);
         
     }//GEN-LAST:event_btnConfiUsuariosActionPerformed
 
     private void btnImpuestosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnImpuestosActionPerformed
-        paneConfiguracion.add("Administrar Impuestos",panelImpuestos);
         paneConfiguracion.remove(panelAdmiUsuarios);
         paneConfiguracion.remove(panelLogotipo);
     }//GEN-LAST:event_btnImpuestosActionPerformed
@@ -3014,7 +3011,6 @@ public class VistaDigo extends javax.swing.JFrame implements Runnable{
 
     private void btnLogotipoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogotipoActionPerformed
         paneConfiguracion.add("Cargar logotipo",panelLogotipo);
-        paneConfiguracion.remove(panelImpuestos);
         paneConfiguracion.remove(panelAdmiUsuarios);
     }//GEN-LAST:event_btnLogotipoActionPerformed
 
